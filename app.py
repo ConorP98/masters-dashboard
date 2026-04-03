@@ -2,26 +2,32 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# --- Helper Functions ---
+# -------------------
+# Helper Functions
+# -------------------
 def combined_odds(df):
+    """Calculate total combined odds for a team"""
     return df['combined_odds'].sum()
 
 def team_strength(df):
-    # Example: sum of scores or some metric
-    return df['strength'].sum()
+    """Calculate some metric for team strength"""
+    # Replace with your own logic if needed
+    return df['strength'].sum() if 'strength' in df.columns else 0
 
 def risk_badge_html(risk):
     colors = {'High':'red','Medium':'orange','Low':'green'}
     return f"<span style='color:{colors.get(risk,'black')}'>{risk}</span>"
 
-# --- Render Functions ---
+# -------------------
+# Render Functions
+# -------------------
 def render_team_panel(df):
     st.subheader("Selected Team")
     if st.session_state.selected_ids:
         team_df = df[df.id.isin(st.session_state.selected_ids)]
         for _, row in team_df.iterrows():
             st.markdown(
-                f"{row['first_name']} {row['last_name']} · Cuts Made: {row['cuts_made_percentage']:.1f}% · Rounds Under Par: {row['rounds_under_par_percentage']:.1f}% · {risk_badge_html(row['risk'])}",
+                f"{row['full_name']} · Cuts Made: {row['cuts_made_percentage']:.1f}% · Rounds Under Par: {row['rounds_under_par_percentage']:.1f}% · {risk_badge_html(row['risk'])}",
                 unsafe_allow_html=True
             )
 
@@ -43,7 +49,7 @@ def render_team_panel(df):
             if not min_odds_ok:
                 st.warning(f"⚠️ Team combined odds must be at least 150/1 (current: {int(total_odds)}/1)")
 
-        # Deselect all button
+        # Clear all button
         if st.button("Clear All"):
             st.session_state.selected_ids = []
             st.experimental_rerun()
@@ -61,7 +67,6 @@ def render_player_picker(df):
 
 def render_player_profile(df_players):
     st.subheader("Player Profile")
-    # Use the first selected player if any, else default to first in DF
     selected_id = st.selectbox(
         "Select a player to view profile",
         options=df_players['id'].tolist(),
@@ -76,7 +81,7 @@ def render_player_profile(df_players):
 def render_historical(hist_odds, hist_picks, hist_winners):
     st.markdown("<h2 class='page-title'>Historical Masters Data</h2>", unsafe_allow_html=True)
 
-    # Fix column case: ensure lowercase matches the DF
+    # Ensure lowercase columns for consistency
     hist_odds = hist_odds.rename(columns=str.lower)
     hist_picks = hist_picks.rename(columns=str.lower)
     hist_winners = hist_winners.rename(columns=str.lower)
@@ -93,10 +98,12 @@ def render_historical(hist_odds, hist_picks, hist_winners):
     st.markdown("### Winners")
     st.dataframe(hist_winners)
 
-# --- Load Data ---
+# -------------------
+# Load Data
+# -------------------
 @st.cache_data
 def load_data():
-    # Replace with actual loading logic
+    # Replace these CSVs with your actual data files
     df_players = pd.read_csv("players.csv")
     df_players['full_name'] = df_players['first_name'] + " " + df_players['last_name']
 
@@ -108,18 +115,24 @@ def load_data():
 
 df_players, hist_odds, hist_picks, hist_winners = load_data()
 
-# --- Session State ---
+# -------------------
+# Session State
+# -------------------
 if 'selected_ids' not in st.session_state:
     st.session_state.selected_ids = []
 if 'page' not in st.session_state:
     st.session_state.page = "Player Picker"
 
-# --- Sidebar Navigation ---
+# -------------------
+# Sidebar Navigation
+# -------------------
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Player Picker", "Player Profile", "Team Panel", "Historical Dashboard"])
 st.session_state.page = page
 
-# --- Main App ---
+# -------------------
+# Main App
+# -------------------
 if st.session_state.page == "Player Picker":
     render_player_picker(df_players)
 elif st.session_state.page == "Player Profile":
