@@ -573,12 +573,12 @@ def render_player_picker(df, filters):
             label_visibility="collapsed",
         )
         if sort_col == "avg_round":
-        # Rookies (avg_round == 0) always go to the bottom
-        rookies = fdf[fdf["avg_round"] == 0]
-        non_rookies = fdf[fdf["avg_round"] != 0].sort_values("avg_round", ascending=True)
-        fdf = pd.concat([non_rookies, rookies])
-    else:
-        fdf = fdf.sort_values(sort_col, ascending=SORT_ASC.get(sort_col, True))
+            # Rookies (avg_round == 0) always go to the bottom
+            rookies = fdf[fdf["avg_round"] == 0]
+            non_rookies = fdf[fdf["avg_round"] != 0].sort_values("avg_round", ascending=True)
+            fdf = pd.concat([non_rookies, rookies])
+        else:
+            fdf = fdf.sort_values(sort_col, ascending=SORT_ASC.get(sort_col, True))
 
         for _, row in fdf.iterrows():
             pid = row["id"]
