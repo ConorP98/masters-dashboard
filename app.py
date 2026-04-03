@@ -58,7 +58,6 @@ code, .mono {
     font-family: 'DM Mono', monospace !important;
 }
 
-/* Metric cards */
 [data-testid="metric-container"] {
     background: var(--surface2) !important;
     border: 1px solid var(--border) !important;
@@ -66,7 +65,6 @@ code, .mono {
     padding: 12px !important;
 }
 
-/* Buttons */
 .stButton > button {
     background: transparent !important;
     border: 1px solid var(--border) !important;
@@ -82,13 +80,11 @@ code, .mono {
     border-color: var(--green) !important;
 }
 
-/* Dataframe */
 [data-testid="stDataFrame"] {
     border: 1px solid var(--border) !important;
     border-radius: 8px !important;
 }
 
-/* Slider */
 .stSlider > div > div > div {
     background: var(--green-dim) !important;
 }
@@ -96,16 +92,13 @@ code, .mono {
     background: var(--green) !important;
 }
 
-/* Select */
 .stMultiSelect > div, .stSelectbox > div {
     background: var(--surface2) !important;
     border-color: var(--border) !important;
 }
 
-/* Divider */
 hr { border-color: var(--border) !important; }
 
-/* Nav pills */
 .nav-pill {
     display: inline-block;
     padding: 6px 18px;
@@ -123,7 +116,6 @@ hr { border-color: var(--border) !important; }
     color: var(--green);
 }
 
-/* Player card */
 .player-card {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -133,7 +125,6 @@ hr { border-color: var(--border) !important; }
     transition: border-color 0.2s;
 }
 .player-card:hover { border-color: var(--green); }
-
 .player-card .name {
     font-family: 'Playfair Display', serif;
     font-size: 17px;
@@ -154,7 +145,6 @@ hr { border-color: var(--border) !important; }
     color: var(--green);
 }
 
-/* Risk badge */
 .badge {
     display: inline-block;
     padding: 2px 8px;
@@ -169,7 +159,6 @@ hr { border-color: var(--border) !important; }
 .badge-balanced { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
 .badge-high     { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
 
-/* Team panel */
 .team-panel {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -179,7 +168,6 @@ hr { border-color: var(--border) !important; }
 .team-panel.valid   { border-color: #4ade80; box-shadow: 0 0 20px rgba(74,222,128,0.1); }
 .team-panel.invalid { border-color: #f87171; box-shadow: 0 0 20px rgba(248,113,113,0.05); }
 
-/* Section header */
 .section-header {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -191,7 +179,6 @@ hr { border-color: var(--border) !important; }
     border-bottom: 1px solid var(--border);
 }
 
-/* Stat row */
 .stat-row {
     display: flex;
     justify-content: space-between;
@@ -203,7 +190,6 @@ hr { border-color: var(--border) !important; }
 .stat-row .label { color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 11px; }
 .stat-row .value { color: var(--text); font-weight: 500; }
 
-/* Page title */
 .page-title {
     font-family: 'Playfair Display', serif;
     font-size: 38px;
@@ -225,27 +211,87 @@ hr { border-color: var(--border) !important; }
     margin-top: 4px;
 }
 
-/* Profile headshot placeholder */
-.headshot-placeholder {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: var(--surface2);
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    color: var(--text-muted);
-}
-
-/* Scrollable table container */
 .scroll-container {
     max-height: 500px;
     overflow-y: auto;
     border: 1px solid var(--border);
     border-radius: 8px;
+}
+
+/* ── Mobile: show team panel at top, hide the desktop column copy ── */
+@media (max-width: 768px) {
+    .mobile-team-top { display: block !important; }
+    .desktop-team-only { display: none !important; }
+}
+@media (min-width: 769px) {
+    .mobile-team-top { display: none !important; }
+    .desktop-team-only { display: block !important; }
+}
+
+
+/* Profile bio card */
+.bio-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+/* Info grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.info-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+.info-item .ilabel {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+.info-item .ivalue {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+}
+.info-item .ivalue.highlight {
+    color: var(--green);
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+/* Suggestion card */
+.suggest-card {
+    background: var(--surface2);
+    border: 1px solid rgba(74,222,128,0.12);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.suggest-card .sname {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+}
+.suggest-card .smeta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -255,8 +301,19 @@ hr { border-color: var(--border) !important; }
 # ─────────────────────────────────────────────
 
 @st.cache_data
+def get_available_images():
+    if not os.path.isdir("images"):
+        return set()
+    return {os.path.splitext(f)[0] for f in os.listdir("images") if f.lower().endswith(".jpg")}
+
+@st.cache_data
 def load_players():
     df = pd.read_csv("consolidated_player_data_2026.csv")
+    # Fix decimal percentages (values <= 1 are decimals, multiply by 100)
+    pct_cols = [c for c in df.columns if "percentage" in c.lower() or c.lower().endswith("_pct")]
+    for col in pct_cols:
+        if col in df.columns and df[col].dropna().max() <= 1.0:
+            df[col] = df[col] * 100
     df = compute_value_scores(df)
     df["risk"] = df["odds"].apply(classify_risk)
     df["implied_prob"] = 1 / (df["odds"] + 1)
@@ -264,27 +321,46 @@ def load_players():
 
 @st.cache_data
 def load_historical_odds():
-    return pd.read_csv("historical_odds.csv")
+    path = "historical_odds.csv"
+    if not os.path.exists(path):
+        st.warning(f"⚠️ {path} not found.")
+        return pd.DataFrame()
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_historical_scores():
-    return pd.read_csv("historical_scores.csv")
+    path = "historical_scores.csv"
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_historical_rounds():
-    return pd.read_csv("historical_rounds.csv")
+    path = "historical_rounds.csv"
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_historical_teams():
-    return pd.read_csv("historical_teams.csv")
+    path = "historical_teams.csv"
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_historical_picks():
-    return pd.read_csv("historical_picks.csv")
+    path = "historical_picks.csv"
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    return pd.read_csv(path)
 
 @st.cache_data
 def load_historical_winners():
-    return pd.read_csv("historical_previous_winners.csv")
+    path = "historical_previous_winners.csv"
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    return pd.read_csv(path)
 
 # ─────────────────────────────────────────────
 # BUSINESS LOGIC
@@ -296,6 +372,12 @@ def minmax(series):
         return pd.Series([0.5] * len(series), index=series.index)
     return (series - mn) / (mx - mn)
 
+def minmax_val(val, series):
+    mn, mx = series.min(), series.max()
+    if mx == mn:
+        return 0.5
+    return (val - mn) / (mx - mn)
+
 def compute_value_scores(df):
     df = df.copy()
     cols_needed = ["avg_round", "cuts_made_percentage", "masters_wins",
@@ -303,15 +385,11 @@ def compute_value_scores(df):
     for c in cols_needed:
         if c not in df.columns:
             df[c] = 0
-
-    # Lower avg_round is better → invert
     df["_n_avg_round"]   = 1 - minmax(df["avg_round"])
     df["_n_cuts"]        = minmax(df["cuts_made_percentage"])
     df["_n_wins"]        = minmax(df["masters_wins"])
     df["_n_rup"]         = minmax(df["rounds_under_par_percentage"])
-    # Lower best_finish_position is better → invert
     df["_n_best_finish"] = 1 - minmax(df["best_finish_position"])
-
     df["value_score"] = (
         0.30 * df["_n_avg_round"] +
         0.20 * df["_n_cuts"] +
@@ -340,6 +418,35 @@ def team_strength(players_df):
 def combined_odds(players_df):
     return players_df["odds"].sum()
 
+# Sort direction map: True = ascending is "better first"
+SORT_ASC = {
+    "odds":                      True,
+    "age":                       True,
+    "avg_round":                 True,
+    "value_score":               False,
+    "cuts_made_percentage":      False,
+    "masters_wins":              False,
+    "rounds_under_par_percentage": False,
+}
+
+def suggest_completions(df, selected_ids, top_n=5):
+    """Suggest best players to complete a valid team."""
+    selected_df = df[df["id"].isin(selected_ids)]
+    n = len(selected_ids)
+    current_odds = selected_df["odds"].sum() if n > 0 else 0
+    slots_remaining = 3 - n
+    candidates = df[~df["id"].isin(selected_ids)].copy()
+
+    if slots_remaining == 1:
+        needed = max(0, 150 - current_odds)
+        candidates = candidates[candidates["odds"] >= needed]
+    elif slots_remaining == 2:
+        # Must be possible to reach 150 with 2 picks; rough filter: each pick avg >= half remaining
+        needed_total = max(0, 150 - current_odds)
+        candidates = candidates[candidates["odds"] >= needed_total * 0.3]
+
+    return candidates.sort_values("value_score", ascending=False).head(top_n)
+
 # ─────────────────────────────────────────────
 # SESSION STATE
 # ─────────────────────────────────────────────
@@ -351,6 +458,17 @@ def init_state():
         st.session_state.page = "Player Picker"
     if "profile_id" not in st.session_state:
         st.session_state.profile_id = None
+    # Persist filter values
+    if "filter_odds_range" not in st.session_state:
+        st.session_state.filter_odds_range = None
+    if "filter_age_range" not in st.session_state:
+        st.session_state.filter_age_range = None
+    if "filter_countries" not in st.session_state:
+        st.session_state.filter_countries = []
+    if "filter_masters_winners_only" not in st.session_state:
+        st.session_state.filter_masters_winners_only = False
+    if "filter_cuts_range" not in st.session_state:
+        st.session_state.filter_cuts_range = None
 
 init_state()
 
@@ -364,7 +482,6 @@ def render_sidebar(df):
         st.markdown('<div class="page-subtitle">Decision Support Tool</div>', unsafe_allow_html=True)
         st.markdown("---")
 
-        # Navigation
         st.markdown('<div class="section-header">Navigation</div>', unsafe_allow_html=True)
         pages = ["Player Picker", "Player Profile", "Historical Dashboard"]
         for p in pages:
@@ -376,24 +493,41 @@ def render_sidebar(df):
 
         st.markdown("---")
 
-        # Filters (only shown on Player Picker)
         if st.session_state.page == "Player Picker":
             st.markdown('<div class="section-header">Filters</div>', unsafe_allow_html=True)
 
             odds_min, odds_max = int(df["odds"].min()), int(df["odds"].max())
-            odds_range = st.slider("Odds range", odds_min, odds_max, (odds_min, odds_max))
+            if st.session_state.filter_odds_range is None:
+                st.session_state.filter_odds_range = (odds_min, odds_max)
+            odds_range = st.slider("Odds range", odds_min, odds_max,
+                                   st.session_state.filter_odds_range, key="odds_slider")
+            st.session_state.filter_odds_range = odds_range
 
             age_min, age_max = int(df["age"].min()), int(df["age"].max())
-            age_range = st.slider("Age range", age_min, age_max, (age_min, age_max))
+            if st.session_state.filter_age_range is None:
+                st.session_state.filter_age_range = (age_min, age_max)
+            age_range = st.slider("Age range", age_min, age_max,
+                                  st.session_state.filter_age_range, key="age_slider")
+            st.session_state.filter_age_range = age_range
 
             countries = sorted(df["country"].dropna().unique().tolist())
-            selected_countries = st.multiselect("Country", countries)
+            selected_countries = st.multiselect("Country", countries,
+                                                default=st.session_state.filter_countries,
+                                                key="country_select")
+            st.session_state.filter_countries = selected_countries
 
-            masters_winners_only = st.toggle("Masters winners only", value=False)
+            masters_winners_only = st.toggle("Masters winners only",
+                                             value=st.session_state.filter_masters_winners_only,
+                                             key="winners_toggle")
+            st.session_state.filter_masters_winners_only = masters_winners_only
 
             cuts_min = float(df["cuts_made_percentage"].min())
             cuts_max = float(df["cuts_made_percentage"].max())
-            cuts_range = st.slider("Cuts made %", cuts_min, cuts_max, (cuts_min, cuts_max))
+            if st.session_state.filter_cuts_range is None:
+                st.session_state.filter_cuts_range = (cuts_min, cuts_max)
+            cuts_range = st.slider("Cuts made %", cuts_min, cuts_max,
+                                   st.session_state.filter_cuts_range, key="cuts_slider")
+            st.session_state.filter_cuts_range = cuts_range
 
             return {
                 "odds_range": odds_range,
@@ -410,7 +544,6 @@ def render_sidebar(df):
 # ─────────────────────────────────────────────
 
 def render_player_picker(df, filters):
-    # Apply filters
     fdf = df.copy()
     fdf = fdf[fdf["odds"].between(*filters["odds_range"])]
     fdf = fdf[fdf["age"].between(*filters["age_range"])]
@@ -420,22 +553,25 @@ def render_player_picker(df, filters):
         fdf = fdf[fdf["masters_wins"] > 0]
     fdf = fdf[fdf["cuts_made_percentage"].between(*filters["cuts_range"])]
 
+    # ── Mobile: team panel at top (hidden on desktop via CSS) ──
+    st.markdown('<div class="mobile-team-top">', unsafe_allow_html=True)
+    render_team_panel(df)
+    st.markdown('</div>', unsafe_allow_html=True)
+
     left_col, right_col = st.columns([2, 1], gap="large")
 
     with left_col:
         st.markdown('<div class="section-header">Player Pool</div>', unsafe_allow_html=True)
         st.caption(f"{len(fdf)} players · {len(st.session_state.selected_ids)}/3 selected")
 
-        # Sort options
         sort_col = st.selectbox(
             "Sort by",
-            ["odds", "value_score", "age", "cuts_made_percentage", "masters_wins"],
+            list(SORT_ASC.keys()),
             format_func=lambda x: x.replace("_", " ").title(),
             label_visibility="collapsed",
         )
-        fdf = fdf.sort_values(sort_col, ascending=(sort_col == "odds"))
+        fdf = fdf.sort_values(sort_col, ascending=SORT_ASC.get(sort_col, True))
 
-        # Player list
         for _, row in fdf.iterrows():
             pid = row["id"]
             is_selected = pid in st.session_state.selected_ids
@@ -443,6 +579,8 @@ def render_player_picker(df, filters):
 
             col_a, col_b = st.columns([4, 1])
             with col_a:
+                best = int(row.get("best_finish_position", 0))
+                best_str = f"T{best}" if best > 0 else "—"
                 st.markdown(f"""
                 <div class="player-card" style="{card_border}">
                     <div class="name">{row['first_name']} {row['last_name']}</div>
@@ -486,7 +624,9 @@ def render_player_picker(df, filters):
                         st.rerun()
 
     with right_col:
+        st.markdown('<div class="desktop-team-only">', unsafe_allow_html=True)
         render_team_panel(df)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_team_panel(df):
@@ -504,27 +644,28 @@ def render_team_panel(df):
     if n == 0:
         st.markdown('<div style="color:var(--text-muted);font-family:\'DM Mono\';font-size:12px;text-align:center;padding:20px 0;">Select 3 golfers to build your team</div>', unsafe_allow_html=True)
     else:
+        # Each selected player row with inline ✕ remove button
         for _, row in selected_df.iterrows():
-            st.markdown(f"""
-            <div style="display:flex;justify-content:space-between;align-items:center;
-                        padding:8px 0;border-bottom:1px solid var(--border);">
-                <div>
+            pid = row["id"]
+            c1, c2 = st.columns([5, 1])
+            with c1:
+                st.markdown(f"""
+                <div style="padding:8px 0;border-bottom:1px solid var(--border);">
                     <div style="font-family:'Playfair Display';font-size:14px;font-weight:700;">
                         {row['first_name']} {row['last_name']}
                     </div>
                     <div style="font-family:'DM Mono';font-size:10px;color:var(--text-muted);">
-                        {risk_badge_html(row['risk'])} &nbsp; score: {row['value_score']:.3f}
+                        {risk_badge_html(row['risk'])} &nbsp; {int(row['odds'])}/1 &nbsp; score: {row['value_score']:.3f}
                     </div>
                 </div>
-                <div style="font-family:'Playfair Display';font-size:18px;font-weight:900;color:var(--green);">
-                    {int(row['odds'])}/1
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
+            with c2:
+                if st.button("✕", key=f"panel_rem_{pid}", help=f"Remove {row['first_name']} {row['last_name']}"):
+                    st.session_state.selected_ids.remove(pid)
+                    st.rerun()
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # Metrics
         odds_color = "#4ade80" if c_odds >= 150 else "#f87171"
         st.markdown(f"""
         <div class="stat-row">
@@ -562,6 +703,31 @@ def render_team_panel(df):
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # Smart completion suggestions
+    if 0 < n < 3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Suggested Additions</div>', unsafe_allow_html=True)
+        suggestions = suggest_completions(df, st.session_state.selected_ids)
+        if suggestions.empty:
+            st.caption("No valid completions found with current odds.")
+        else:
+            for _, srow in suggestions.iterrows():
+                spid = srow["id"]
+                sc1, sc2 = st.columns([4, 1])
+                with sc1:
+                    st.markdown(f"""
+                    <div class="suggest-card">
+                        <div>
+                            <div class="sname">{srow['first_name']} {srow['last_name']}</div>
+                            <div class="smeta">{int(srow['odds'])}/1 · score {srow['value_score']:.3f} · {risk_badge_html(srow['risk'])}</div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with sc2:
+                    if st.button("+ Add", key=f"sug_{spid}"):
+                        st.session_state.selected_ids.append(spid)
+                        st.rerun()
+
     if n > 0:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Clear team", use_container_width=True):
@@ -573,8 +739,7 @@ def render_team_panel(df):
 # PLAYER PROFILE PAGE
 # ─────────────────────────────────────────────
 
-def render_player_profile(df):
-    # Player selector at top
+def render_player_profile(df, available_images):
     player_options = df.apply(lambda r: f"{r['first_name']} {r['last_name']}", axis=1).tolist()
     player_ids = df["id"].tolist()
 
@@ -589,13 +754,13 @@ def render_player_profile(df):
 
     st.markdown("---")
 
-    left, right = st.columns([1, 2], gap="large")
+    # ── Top section: photo + identity + add/remove ──
+    top_left, top_mid, top_right = st.columns([1, 2, 1], gap="large")
 
-    with left:
-        # Headshot
-        img_path = f"images/{row['first_name']} {row['last_name']}.jpg"
-        if os.path.exists(img_path):
-            st.image(img_path, width=180)
+    with top_left:
+        img_key = f"{row['first_name']} {row['last_name']}"
+        if img_key in available_images:
+            st.image(f"images/{img_key}.jpg", width=180)
         else:
             initials = f"{row['first_name'][0]}{row['last_name'][0]}"
             st.markdown(f"""
@@ -607,93 +772,396 @@ def render_player_profile(df):
             </div>
             """, unsafe_allow_html=True)
 
+    with top_mid:
         st.markdown(f"""
-        <div style="margin-top:16px;">
-            <div style="font-family:'Playfair Display';font-size:26px;font-weight:900;">
-                {row['first_name']}<br>{row['last_name']}
+        <div style="padding-top: 8px;">
+            <div style="font-family:'Playfair Display';font-size:32px;font-weight:900;line-height:1.1;">
+                {row['first_name']} {row['last_name']}
             </div>
-            <div style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);margin-top:4px;letter-spacing:0.08em;">
-                {row.get('country','—')} · {int(row['age'])} yrs
+            <div style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);margin-top:6px;letter-spacing:0.08em;">
+                {row.get('country','—')} &nbsp;·&nbsp; Age {int(row['age'])}
+                {f" &nbsp;·&nbsp; World Rank #{int(row['world_ranking'])}" if pd.notna(row.get('world_ranking')) else ""}
             </div>
-            <div style="margin-top:12px;">{risk_badge_html(row['risk'])}</div>
+            <div style="margin-top:10px;">
+                {risk_badge_html(row['risk'])}
+                <span style="font-family:'Playfair Display';font-size:28px;font-weight:900;color:var(--green);margin-left:16px;">{int(row['odds'])}/1</span>
+            </div>
+            {f'<div style="font-family:DM Sans;font-size:13px;color:var(--text-muted);margin-top:10px;line-height:1.5;">{row["bio"]}</div>' if pd.notna(row.get('bio')) and str(row.get('bio','')) not in ['','nan'] else ''}
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Key Stats</div>', unsafe_allow_html=True)
-
-        stats = [
-            ("Odds",             f"{int(row['odds'])}/1"),
-            ("Value Score",      f"{row['value_score']:.3f}"),
-            ("Masters Wins",     f"{int(row.get('masters_wins', 0))}"),
-            ("Cuts Made",        f"{row.get('cuts_made_percentage', 0):.0f}%"),
-            ("Avg Round",        f"{row.get('avg_round', 0):.2f}"),
-            ("Rounds Under Par", f"{row.get('rounds_under_par_percentage', 0):.0f}%"),
-            ("Best Finish",      f"T{int(row.get('best_finish_position', 0))}"),
-            ("Implied Prob",     f"{row['implied_prob']*100:.1f}%"),
-        ]
-        for label, val in stats:
-            st.markdown(f"""
-            <div class="stat-row">
-                <span class="label">{label.upper()}</span>
-                <span class="value" style="font-family:'DM Mono';">{val}</span>
-            </div>
-            """, unsafe_allow_html=True)
-
+    with top_right:
         st.markdown("<br>", unsafe_allow_html=True)
         if row["id"] not in st.session_state.selected_ids:
             if len(st.session_state.selected_ids) < 3:
-                if st.button("+ Add to team", use_container_width=True):
+                if st.button("+ Add to team", use_container_width=True, key="prof_add"):
                     st.session_state.selected_ids.append(row["id"])
                     st.rerun()
+            else:
+                st.button("Team full", use_container_width=True, disabled=True)
         else:
-            if st.button("✕ Remove from team", use_container_width=True):
+            if st.button("✕ Remove from team", use_container_width=True, key="prof_rem"):
                 st.session_state.selected_ids.remove(row["id"])
                 st.rerun()
 
-    with right:
-        st.markdown('<div class="section-header">Performance Radar</div>', unsafe_allow_html=True)
+    st.markdown("---")
 
-        norm_cols = [c for c in df.columns if c.endswith("_norm")]
-        if norm_cols:
-            values = [row[c] for c in norm_cols]
-            labels = [c.replace("_norm", "").replace("_", " ").title() for c in norm_cols]
-            values_closed = values + [values[0]]
-            labels_closed = labels + [labels[0]]
+    # ── Tabbed sections ──
+    tab_overview, tab_stats, tab_masters, tab_radar = st.tabs(
+        ["📋 Overview", "📊 Career Stats", "🏆 Masters Record", "🎯 Radar"]
+    )
 
-            fig = go.Figure()
-            fig.add_trace(go.Scatterpolar(
-                r=values_closed,
-                theta=labels_closed,
-                fill="toself",
-                fillcolor="rgba(74,222,128,0.12)",
-                line=dict(color="#4ade80", width=2),
-                marker=dict(color="#4ade80", size=5),
-            ))
-            fig.update_layout(
-                polar=dict(
-                    bgcolor="rgba(17,24,17,0)",
-                    radialaxis=dict(
-                        visible=True, range=[0, 1],
-                        gridcolor="rgba(74,222,128,0.15)",
-                        linecolor="rgba(74,222,128,0.15)",
-                        tickfont=dict(color="#7a9a7a", size=9, family="DM Mono"),
-                    ),
-                    angularaxis=dict(
-                        gridcolor="rgba(74,222,128,0.12)",
-                        linecolor="rgba(74,222,128,0.12)",
-                        tickfont=dict(color="#e8f0e8", size=10, family="DM Sans"),
-                    ),
+    with tab_overview:
+        _render_profile_overview(row, df)
+
+    with tab_stats:
+        _render_profile_stats(row, df)
+
+    with tab_masters:
+        _render_profile_masters(row, df)
+
+    with tab_radar:
+        _render_profile_radar(row, df)
+
+
+def _safe(row, col, default="—"):
+    val = row.get(col, default)
+    if pd.isna(val) if not isinstance(val, str) else val in ("", "nan"):
+        return default
+    return val
+
+
+def _render_profile_overview(row, df):
+    """Key facts, rankings, odds context."""
+    col1, col2 = st.columns(2, gap="large")
+
+    with col1:
+        st.markdown('<div class="section-header">Player Overview</div>', unsafe_allow_html=True)
+
+        # Build info grid items dynamically based on available columns
+        grid_items = []
+        if pd.notna(row.get("world_ranking")):
+            grid_items.append(("WORLD RANKING", f"#{int(row['world_ranking'])}", True))
+        if pd.notna(row.get("fedex_rank")):
+            grid_items.append(("FEDEX RANK", f"#{int(row['fedex_rank'])}", False))
+        if pd.notna(row.get("age")):
+            grid_items.append(("AGE", str(int(row["age"])), False))
+        if pd.notna(row.get("turned_pro")):
+            grid_items.append(("TURNED PRO", str(int(row["turned_pro"])), False))
+        if pd.notna(row.get("country")):
+            grid_items.append(("COUNTRY", str(row["country"]), False))
+        if pd.notna(row.get("college")):
+            grid_items.append(("COLLEGE", str(row["college"]), False))
+
+        html_items = ""
+        for label, val, highlight in grid_items:
+            cls = "highlight" if highlight else ""
+            html_items += f"""
+            <div class="info-item">
+                <div class="ilabel">{label}</div>
+                <div class="ivalue {cls}">{val}</div>
+            </div>"""
+
+        if html_items:
+            st.markdown(f'<div class="info-grid">{html_items}</div>', unsafe_allow_html=True)
+
+        # Implied probability and odds context
+        implied = row["implied_prob"] * 100
+        st.markdown(f"""
+        <div class="bio-card" style="margin-top:8px;">
+            <div class="section-header" style="border:none;margin-bottom:6px;">ODDS CONTEXT</div>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                <div>
+                    <div style="font-family:'DM Mono';font-size:9px;letter-spacing:0.1em;color:var(--text-muted);">ODDS</div>
+                    <div style="font-family:'Playfair Display';font-size:24px;font-weight:900;color:var(--green);">{int(row['odds'])}/1</div>
+                </div>
+                <div>
+                    <div style="font-family:'DM Mono';font-size:9px;letter-spacing:0.1em;color:var(--text-muted);">IMPLIED PROB</div>
+                    <div style="font-family:'DM Mono';font-size:20px;font-weight:500;">{implied:.1f}%</div>
+                </div>
+                <div>
+                    <div style="font-family:'DM Mono';font-size:9px;letter-spacing:0.1em;color:var(--text-muted);">VALUE SCORE</div>
+                    <div style="font-family:'DM Mono';font-size:20px;font-weight:500;">{row['value_score']:.3f}</div>
+                </div>
+                <div>
+                    <div style="font-family:'DM Mono';font-size:9px;letter-spacing:0.1em;color:var(--text-muted);">RISK TIER</div>
+                    <div style="margin-top:4px;">{risk_badge_html(row['risk'])}</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="section-header">2025/26 Season Form</div>', unsafe_allow_html=True)
+
+        season_fields = [
+            ("season_wins", "Season Wins"),
+            ("season_top10s", "Top 10s"),
+            ("season_top25s", "Top 25s"),
+            ("season_events", "Events Played"),
+            ("season_cuts_made", "Cuts Made"),
+            ("season_earnings", "Earnings ($)"),
+            ("scoring_avg", "Scoring Average"),
+            ("driving_distance", "Driving Distance (yds)"),
+            ("driving_accuracy_percentage", "Driving Accuracy"),
+            ("greens_in_regulation_percentage", "GIR %"),
+            ("putts_per_round", "Putts / Round"),
+            ("scrambling_percentage", "Scrambling %"),
+            ("strokes_gained_total", "SG: Total"),
+            ("strokes_gained_off_tee", "SG: Off Tee"),
+            ("strokes_gained_approach", "SG: Approach"),
+            ("strokes_gained_around_green", "SG: Around Green"),
+            ("strokes_gained_putting", "SG: Putting"),
+        ]
+
+        found_any = False
+        for col_name, label in season_fields:
+            val = row.get(col_name)
+            if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                # Format percentages
+                if "percentage" in col_name and isinstance(val, (int, float)):
+                    display_val = f"{val:.1f}%"
+                elif "earnings" in col_name and isinstance(val, (int, float)):
+                    display_val = f"${val:,.0f}"
+                elif "strokes_gained" in col_name and isinstance(val, (int, float)):
+                    color = "#4ade80" if val > 0 else "#f87171"
+                    display_val = f'<span style="color:{color};">{val:+.3f}</span>'
+                else:
+                    display_val = f"{val}" if not isinstance(val, float) else f"{val:.2f}"
+                st.markdown(f"""
+                <div class="stat-row">
+                    <span class="label">{label.upper()}</span>
+                    <span class="value" style="font-family:'DM Mono';">{display_val}</span>
+                </div>
+                """, unsafe_allow_html=True)
+                found_any = True
+
+        if not found_any:
+            st.info("No season form data available for this player.")
+
+
+def _render_profile_stats(row, df):
+    """Full career stats panel."""
+    col1, col2 = st.columns(2, gap="large")
+
+    with col1:
+        st.markdown('<div class="section-header">Masters at Augusta</div>', unsafe_allow_html=True)
+        masters_fields = [
+            ("masters_appearances", "Appearances"),
+            ("masters_wins", "Wins"),
+            ("cuts_made_percentage", "Cuts Made %"),
+            ("avg_round", "Avg Round Score"),
+            ("rounds_under_par_percentage", "Rounds Under Par %"),
+            ("best_finish_position", "Best Finish"),
+            ("avg_finish_position", "Avg Finish Position"),
+            ("total_rounds_played", "Total Rounds Played"),
+        ]
+        for col_name, label in masters_fields:
+            val = row.get(col_name)
+            if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                if col_name == "best_finish_position":
+                    bv = int(val) if val > 0 else None
+                    display_val = f"T{bv}" if bv else "—"
+                elif "percentage" in col_name:
+                    display_val = f"{val:.1f}%"
+                elif "avg_round" in col_name:
+                    display_val = f"{val:.2f}"
+                elif isinstance(val, float):
+                    display_val = f"{val:.2f}"
+                else:
+                    display_val = str(int(val))
+                st.markdown(f"""
+                <div class="stat-row">
+                    <span class="label">{label.upper()}</span>
+                    <span class="value" style="font-family:'DM Mono';">{display_val}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="section-header">Career Overview</div>', unsafe_allow_html=True)
+        career_fields = [
+            ("pga_wins", "PGA Tour Wins"),
+            ("major_wins", "Major Wins"),
+            ("career_earnings", "Career Earnings ($)"),
+            ("career_top10s", "Career Top 10s"),
+            ("career_cuts_made", "Career Cuts Made"),
+            ("career_events", "Career Events"),
+            ("career_scoring_avg", "Career Scoring Avg"),
+            ("weeks_at_world_number_1", "Weeks at World #1"),
+        ]
+        for col_name, label in career_fields:
+            val = row.get(col_name)
+            if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                if "earnings" in col_name and isinstance(val, (int, float)):
+                    display_val = f"${val:,.0f}"
+                elif isinstance(val, float):
+                    display_val = f"{val:.2f}"
+                else:
+                    display_val = str(int(val))
+                st.markdown(f"""
+                <div class="stat-row">
+                    <span class="label">{label.upper()}</span>
+                    <span class="value" style="font-family:'DM Mono';">{display_val}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+    # Odds vs field context chart
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Odds vs Field</div>', unsafe_allow_html=True)
+    fig = go.Figure()
+    # Distribution of all player odds
+    fig.add_trace(go.Histogram(
+        x=df["odds"],
+        nbinsx=25,
+        marker_color="rgba(74,222,128,0.25)",
+        marker_line_color="rgba(74,222,128,0.5)",
+        marker_line_width=1,
+        name="Field",
+    ))
+    # This player's odds
+    fig.add_vline(
+        x=row["odds"],
+        line_color="#4ade80",
+        line_width=2,
+        line_dash="dash",
+        annotation_text=f"{row['first_name']} {row['last_name']} ({int(row['odds'])}/1)",
+        annotation_font_color="#4ade80",
+        annotation_font_size=11,
+    )
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(17,24,17,0.4)",
+        font=dict(family="DM Sans", color="#e8f0e8", size=11),
+        xaxis=dict(title="Odds", gridcolor="rgba(74,222,128,0.08)", linecolor="rgba(74,222,128,0.2)"),
+        yaxis=dict(title="# Players", gridcolor="rgba(74,222,128,0.08)", linecolor="rgba(74,222,128,0.2)"),
+        margin=dict(l=40, r=20, t=30, b=40),
+        height=260,
+        showlegend=False,
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def _render_profile_masters(row, df):
+    """Masters-specific record and historical context."""
+    st.markdown('<div class="section-header">Augusta National Record</div>', unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3, gap="medium")
+
+    metrics = [
+        ("Masters Wins", "masters_wins", int),
+        ("Appearances", "masters_appearances", int),
+        ("Best Finish", "best_finish_position", lambda v: f"T{int(v)}" if v > 0 else "—"),
+        ("Cuts Made %", "cuts_made_percentage", lambda v: f"{v:.0f}%"),
+        ("Avg Round", "avg_round", lambda v: f"{v:.2f}"),
+        ("Rounds Under Par %", "rounds_under_par_percentage", lambda v: f"{v:.0f}%"),
+    ]
+
+    for i, (label, col_name, fmt) in enumerate(metrics):
+        col = [col1, col2, col3][i % 3]
+        val = row.get(col_name)
+        if val is not None and not (isinstance(val, float) and np.isnan(val)):
+            with col:
+                display = fmt(val)
+                st.metric(label, display)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Round-by-round scoring distribution vs field avg
+    st.markdown('<div class="section-header">Scoring vs Field Average</div>', unsafe_allow_html=True)
+
+    round_cols = [c for c in row.index if c.startswith("round_") and "avg" in c.lower()]
+    if round_cols:
+        rd_labels = [c.replace("_avg", "").replace("round_", "Round ").title() for c in round_cols]
+        rd_vals = [row[c] for c in round_cols]
+        field_avgs = [df[c].mean() for c in round_cols]
+
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=rd_labels, y=rd_vals,
+            name=f"{row['first_name']} {row['last_name']}",
+            marker_color="#4ade80",
+        ))
+        fig.add_trace(go.Scatter(
+            x=rd_labels, y=field_avgs,
+            name="Field Average",
+            mode="lines+markers",
+            line=dict(color="#fbbf24", width=2, dash="dot"),
+            marker=dict(color="#fbbf24", size=6),
+        ))
+        fig.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(17,24,17,0.4)",
+            font=dict(family="DM Sans", color="#e8f0e8", size=11),
+            xaxis=dict(gridcolor="rgba(74,222,128,0.08)"),
+            yaxis=dict(gridcolor="rgba(74,222,128,0.08)", title="Avg Score"),
+            margin=dict(l=40, r=20, t=30, b=40),
+            height=300,
+            legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(size=10)),
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        # Value score vs field bar
+        sorted_df = df.sort_values("value_score", ascending=False).reset_index(drop=True)
+        player_rank = sorted_df[sorted_df["id"] == row["id"]].index
+        player_rank_val = int(player_rank[0]) + 1 if len(player_rank) > 0 else "—"
+        st.info(f"No per-round averages found in player data. {row['first_name']} {row['last_name']} ranks **#{player_rank_val}** by value score in the field.")
+
+
+def _render_profile_radar(row, df):
+    """Performance radar using _norm columns."""
+    norm_cols = [c for c in df.columns if c.endswith("_norm")]
+    if norm_cols:
+        values = [row[c] for c in norm_cols]
+        labels = [c.replace("_norm", "").replace("_", " ").title() for c in norm_cols]
+        values_closed = values + [values[0]]
+        labels_closed = labels + [labels[0]]
+
+        # Also compute field average for comparison
+        field_avgs = [df[c].mean() for c in norm_cols] + [df[norm_cols[0]].mean()]
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatterpolar(
+            r=field_avgs,
+            theta=labels_closed,
+            fill="toself",
+            fillcolor="rgba(251,191,36,0.06)",
+            line=dict(color="#fbbf24", width=1.5, dash="dot"),
+            name="Field Average",
+        ))
+        fig.add_trace(go.Scatterpolar(
+            r=values_closed,
+            theta=labels_closed,
+            fill="toself",
+            fillcolor="rgba(74,222,128,0.12)",
+            line=dict(color="#4ade80", width=2),
+            marker=dict(color="#4ade80", size=5),
+            name=f"{row['first_name']} {row['last_name']}",
+        ))
+        fig.update_layout(
+            polar=dict(
+                bgcolor="rgba(17,24,17,0)",
+                radialaxis=dict(
+                    visible=True, range=[0, 1],
+                    gridcolor="rgba(74,222,128,0.15)",
+                    linecolor="rgba(74,222,128,0.15)",
+                    tickfont=dict(color="#7a9a7a", size=9, family="DM Mono"),
                 ),
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                margin=dict(l=60, r=60, t=40, b=40),
-                height=420,
-                showlegend=False,
-            )
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.info("No normalised (_norm) columns found in player data.")
+                angularaxis=dict(
+                    gridcolor="rgba(74,222,128,0.12)",
+                    linecolor="rgba(74,222,128,0.12)",
+                    tickfont=dict(color="#e8f0e8", size=10, family="DM Sans"),
+                ),
+            ),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=60, r=60, t=40, b=40),
+            height=480,
+            showlegend=True,
+            legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#e8f0e8", size=10)),
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("No normalised (_norm) columns found in player data.")
 
 
 # ─────────────────────────────────────────────
@@ -709,7 +1177,8 @@ CHART_LAYOUT = dict(
     margin=dict(l=40, r=20, t=40, b=40),
 )
 
-def render_historical(hist_odds, hist_picks, hist_winners):
+
+def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rounds, hist_teams):
     st.markdown('<div class="section-header">Historical Dashboard</div>', unsafe_allow_html=True)
 
     row1_l, row1_r = st.columns(2, gap="large")
@@ -755,8 +1224,7 @@ def render_historical(hist_odds, hist_picks, hist_winners):
                 y=odds_by_year["combined_odds"],
                 mode="lines+markers",
                 line=dict(color="#4ade80", width=2.5),
-                marker=dict(color="#4ade80", size=7,
-                            line=dict(color="#0a0f0a", width=2)),
+                marker=dict(color="#4ade80", size=7, line=dict(color="#0a0f0a", width=2)),
                 fill="tozeroy",
                 fillcolor="rgba(74,222,128,0.07)",
             ))
@@ -768,17 +1236,13 @@ def render_historical(hist_odds, hist_picks, hist_winners):
     st.markdown("---")
     row2_l, row2_r = st.columns(2, gap="large")
 
-    # 3. combined_odds vs position scatter
+    # 3. Combined odds vs position scatter
     with row2_l:
         st.markdown("**Combined Odds vs Finishing Position**")
         if not hist_odds.empty and "combined_odds" in hist_odds.columns and "position" in hist_odds.columns:
             scatter_df = hist_odds.dropna(subset=["combined_odds", "position"]).copy()
-            try:
-                scatter_df["position"] = pd.to_numeric(scatter_df["position"], errors="coerce")
-                scatter_df = scatter_df.dropna(subset=["position"])
-            except Exception:
-                pass
-
+            scatter_df["position"] = pd.to_numeric(scatter_df["position"], errors="coerce")
+            scatter_df = scatter_df.dropna(subset=["position"])
             fig = go.Figure(go.Scatter(
                 x=scatter_df["combined_odds"],
                 y=scatter_df["position"],
@@ -786,8 +1250,7 @@ def render_historical(hist_odds, hist_picks, hist_winners):
                 marker=dict(
                     color=scatter_df["combined_odds"],
                     colorscale=[[0, "#166534"], [1, "#4ade80"]],
-                    size=8,
-                    opacity=0.7,
+                    size=8, opacity=0.7,
                     line=dict(color="#0a0f0a", width=1),
                 ),
                 text=scatter_df.get("participant", None),
@@ -796,8 +1259,7 @@ def render_historical(hist_odds, hist_picks, hist_winners):
             fig.update_layout(**CHART_LAYOUT, height=340,
                               xaxis_title="Combined Odds",
                               yaxis_title="Position",
-                              yaxis=dict(autorange="reversed",
-                                         gridcolor="rgba(74,222,128,0.08)"))
+                              yaxis=dict(autorange="reversed", gridcolor="rgba(74,222,128,0.08)"))
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No odds/position data.")
@@ -822,34 +1284,188 @@ def render_historical(hist_odds, hist_picks, hist_winners):
         else:
             st.info("No winners data.")
 
+    # ── NEW: hist_rounds — Score distribution by year ──
+    if not hist_rounds.empty:
+        st.markdown("---")
+        st.markdown("**Round Score Distribution by Year**")
+        score_col = next((c for c in ["score", "round_score", "total"] if c in hist_rounds.columns), None)
+        year_col = "year" if "year" in hist_rounds.columns else None
+        if score_col and year_col:
+            fig = go.Figure()
+            years = sorted(hist_rounds[year_col].dropna().unique())
+            green_shades = [f"rgba(74,222,128,{0.3 + 0.7*i/max(len(years)-1,1):.2f})" for i in range(len(years))]
+            for i, yr in enumerate(years):
+                yr_data = hist_rounds[hist_rounds[year_col] == yr][score_col].dropna()
+                fig.add_trace(go.Box(
+                    y=yr_data, name=str(int(yr)),
+                    marker_color=green_shades[i],
+                    line_color=green_shades[i],
+                    fillcolor=f"rgba(74,222,128,{0.08 + 0.1*i/max(len(years)-1,1):.2f})",
+                ))
+            fig.update_layout(**CHART_LAYOUT, height=320,
+                              yaxis_title="Round Score",
+                              xaxis_title="Year",
+                              showlegend=False)
+            st.plotly_chart(fig, use_container_width=True)
+
+    # ── NEW: hist_scores — Player consistency across years ──
+    if not hist_scores.empty:
+        st.markdown("---")
+        row3_l, row3_r = st.columns(2, gap="large")
+
+        with row3_l:
+            st.markdown("**Top Players by Avg Score (All Years)**")
+            score_col = next((c for c in ["total_score", "score", "avg_score"] if c in hist_scores.columns), None)
+            name_col = next((c for c in ["full_name", "player", "name"] if c in hist_scores.columns), None)
+            if score_col and name_col:
+                agg = (
+                    hist_scores.groupby(name_col, as_index=False)[score_col]
+                    .mean()
+                    .sort_values(score_col)
+                    .head(12)
+                )
+                fig = go.Figure(go.Bar(
+                    x=agg[score_col], y=agg[name_col],
+                    orientation="h",
+                    marker=dict(color="#4ade80", opacity=0.8),
+                ))
+                fig.update_layout(**CHART_LAYOUT, height=340,
+                                  xaxis_title="Avg Score",
+                                  yaxis=dict(autorange="reversed", gridcolor="rgba(74,222,128,0.08)"))
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("Expected score/name columns not found in historical_scores.csv.")
+
+        with row3_r:
+            st.markdown("**Score Trends Over Years**")
+            year_col = "year" if "year" in hist_scores.columns else None
+            if score_col and year_col:
+                yearly_avg = (
+                    hist_scores.groupby(year_col, as_index=False)[score_col]
+                    .mean()
+                    .sort_values(year_col)
+                )
+                fig = go.Figure(go.Scatter(
+                    x=yearly_avg[year_col], y=yearly_avg[score_col],
+                    mode="lines+markers",
+                    line=dict(color="#fbbf24", width=2.5),
+                    marker=dict(color="#fbbf24", size=7, line=dict(color="#0a0f0a", width=2)),
+                    fill="tozeroy",
+                    fillcolor="rgba(251,191,36,0.06)",
+                ))
+                fig.update_layout(**CHART_LAYOUT, height=340,
+                                  xaxis_title="Year",
+                                  yaxis_title="Avg Score")
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("Year/score columns not found in historical_scores.csv.")
+
+    # ── NEW: hist_teams — Team score vs position analysis ──
+    if not hist_teams.empty:
+        st.markdown("---")
+        st.markdown("**Team Score vs Position (Does Value Score Predict Results?)**")
+        score_col = next((c for c in ["team_score", "total_score", "combined_score"] if c in hist_teams.columns), None)
+        pos_col = next((c for c in ["position", "finishing_position", "rank"] if c in hist_teams.columns), None)
+        participant_col = next((c for c in ["participant", "name", "player"] if c in hist_teams.columns), None)
+        year_col = "year" if "year" in hist_teams.columns else None
+
+        if score_col and pos_col:
+            tdf = hist_teams.copy()
+            tdf[pos_col] = pd.to_numeric(tdf[pos_col], errors="coerce")
+            tdf[score_col] = pd.to_numeric(tdf[score_col], errors="coerce")
+            tdf = tdf.dropna(subset=[score_col, pos_col])
+
+            fig = go.Figure(go.Scatter(
+                x=tdf[score_col],
+                y=tdf[pos_col],
+                mode="markers",
+                marker=dict(
+                    color=tdf[year_col] if year_col else "#4ade80",
+                    colorscale=[[0, "#166534"], [1, "#4ade80"]],
+                    size=9, opacity=0.75,
+                    line=dict(color="#0a0f0a", width=1),
+                    colorbar=dict(title="Year", tickfont=dict(color="#e8f0e8", size=9)) if year_col else None,
+                    showscale=bool(year_col),
+                ),
+                text=tdf[participant_col] if participant_col else None,
+                hovertemplate=("<b>%{text}</b><br>Score: %{x}<br>Position: %{y}<extra></extra>"
+                               if participant_col else "Score: %{x}<br>Position: %{y}<extra></extra>"),
+            ))
+
+            # Add trend line
+            valid = tdf[[score_col, pos_col]].dropna()
+            if len(valid) > 2:
+                m, b = np.polyfit(valid[score_col], valid[pos_col], 1)
+                x_range = np.linspace(valid[score_col].min(), valid[score_col].max(), 50)
+                fig.add_trace(go.Scatter(
+                    x=x_range, y=m * x_range + b,
+                    mode="lines",
+                    line=dict(color="#f87171", width=1.5, dash="dash"),
+                    name="Trend",
+                    showlegend=True,
+                ))
+
+            fig.update_layout(**CHART_LAYOUT, height=360,
+                              xaxis_title="Team Combined Score",
+                              yaxis_title="Finishing Position",
+                              yaxis=dict(autorange="reversed", gridcolor="rgba(74,222,128,0.08)"),
+                              legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(size=10)))
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("Expected team score/position columns not found in historical_teams.csv.")
+
+        # Participant performance leaderboard
+        if participant_col and pos_col:
+            st.markdown("---")
+            st.markdown("**Participant Performance Over the Years**")
+            part_stats = (
+                hist_teams.groupby(participant_col)[pos_col]
+                .agg(["mean", "min", "count"])
+                .rename(columns={"mean": "Avg Position", "min": "Best Position", "count": "Years Entered"})
+                .sort_values("Avg Position")
+                .reset_index()
+            )
+            part_stats["Avg Position"] = part_stats["Avg Position"].round(1)
+            part_stats["Best Position"] = part_stats["Best Position"].astype(int)
+            st.dataframe(
+                part_stats,
+                use_container_width=True,
+                height=300,
+                hide_index=True,
+                column_config={
+                    participant_col:   st.column_config.TextColumn("Participant"),
+                    "Avg Position":    st.column_config.NumberColumn("Avg Finish", format="%.1f"),
+                    "Best Position":   st.column_config.NumberColumn("Best Finish"),
+                    "Years Entered":   st.column_config.NumberColumn("Years Entered"),
+                },
+            )
+
 
 # ─────────────────────────────────────────────
 # MAIN
 # ─────────────────────────────────────────────
 
 def main():
-    # Load all data
     try:
         df = load_players()
     except FileNotFoundError:
         st.error("❌  `consolidated_player_data_2026.csv` not found. Place it in the same directory as app.py.")
         st.stop()
 
-    try:
-        hist_odds    = load_historical_odds()
-        hist_picks   = load_historical_picks()
-        hist_winners = load_historical_winners()
-    except Exception:
-        hist_odds = hist_picks = hist_winners = pd.DataFrame()
+    available_images = get_available_images()
 
-    # Sidebar (returns filters dict)
+    hist_odds    = load_historical_odds()
+    hist_picks   = load_historical_picks()
+    hist_winners = load_historical_winners()
+    hist_scores  = load_historical_scores()
+    hist_rounds  = load_historical_rounds()
+    hist_teams   = load_historical_teams()
+
     filters = render_sidebar(df)
-
-    # Page header
     page = st.session_state.page
 
     if page == "Player Picker":
-        st.markdown(f"""
+        st.markdown("""
         <div class="page-title">Player Picker</div>
         <div class="page-subtitle">Masters 2026 · Build your 3-man team · Min. 150 combined odds</div>
         """, unsafe_allow_html=True)
@@ -857,20 +1473,20 @@ def main():
         render_player_picker(df, filters)
 
     elif page == "Player Profile":
-        st.markdown(f"""
+        st.markdown("""
         <div class="page-title">Player Profile</div>
-        <div class="page-subtitle">Detailed stats & performance radar</div>
+        <div class="page-subtitle">Detailed stats · Augusta record · Performance radar</div>
         """, unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
-        render_player_profile(df)
+        render_player_profile(df, available_images)
 
     elif page == "Historical Dashboard":
-        st.markdown(f"""
+        st.markdown("""
         <div class="page-title">Historical Dashboard</div>
         <div class="page-subtitle">Trends, picks & winners across previous years</div>
         """, unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
-        render_historical(hist_odds, hist_picks, hist_winners)
+        render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rounds, hist_teams)
 
 
 if __name__ == "__main__":
