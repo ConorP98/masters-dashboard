@@ -11,15 +11,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Masters logo (official SVG flag mark, public domain shape) ────────────────
-MASTERS_LOGO_SVG = """
-<svg width="36" height="36" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" rx="8" fill="#006747"/>
-  <text x="50" y="62" font-family="Georgia,serif" font-size="44" font-weight="bold"
-        fill="#f5d077" text-anchor="middle" dominant-baseline="middle">M</text>
-  <rect x="18" y="72" width="64" height="3" rx="1.5" fill="#f5d077"/>
-</svg>
-"""
 
 st.markdown("""
 <style>
@@ -271,12 +262,8 @@ init_state()
 def render_sidebar(df):
     with st.sidebar:
         # Logo + title
-        st.markdown(f"""<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
-            {MASTERS_LOGO_SVG}
-            <div>
-                <div class="page-title" style="font-size:20px;line-height:1.1;">Masters 2026</div>
-                <div class="page-subtitle" style="font-size:9px;">Decision Support Tool</div>
-            </div></div>""", unsafe_allow_html=True)
+        st.markdown("## ⛳ Masters 2026")
+        st.caption("Decision Support Tool")
         st.markdown("---")
         st.markdown('<div class="section-header">Navigation</div>', unsafe_allow_html=True)
         pages = ["Player Picker","Player Profile","Score & Risk","Historical Dashboard"]
@@ -695,23 +682,25 @@ def _render_profile_combined(row, df):
 
 
 def _render_profile_radar(row, df):
-    # Build list of valid norm cols — must have a numeric backing column
+    # Build list of valid norm cols — use the _norm column value directly (already 0-1)
     norm_cols = []
     for c in df.columns:
         if not c.endswith("_norm"):
             continue
-        raw = c[:-5]  # e.g. "cuts_made_percentage"
-        src = raw if raw in df.columns else c
-        # Must be numeric
-        if pd.to_numeric(df[src], errors="coerce").notna().any():
+        # Use the _norm column itself as the value — it's already normalised 0→1
+        s = pd.to_numeric(df[c], errors="coerce")
+        if s.notna().any():
             norm_cols.append(c)
 
     if not norm_cols:
         st.info("No normalised (_norm) columns found in player data.")
         return
 
-    # Map norm col → raw col for tooltip display
-    raw_col_map = {nc: (nc[:-5] if nc[:-5] in df.columns else nc) for nc in norm_cols}
+    # Map norm col → raw col for tooltip display (e.g. cuts_made_percentage_norm → cuts_made_percentage)
+    raw_col_map = {}
+    for nc in norm_cols:
+        raw = nc[:-5]  # strip _norm
+        raw_col_map[nc] = raw if raw in df.columns else nc
 
     player_options = ["Field Average"] + df.apply(lambda r: f"{r['first_name']} {r['last_name']}", axis=1).tolist()
     compare_label = st.selectbox("Compare against", player_options, index=0, key="radar_compare")
@@ -734,9 +723,12 @@ def _render_profile_radar(row, df):
     def player_vals(r):
         vals, raws = [], []
         for nc in norm_cols:
+            # Shape value: always from the _norm column (guaranteed 0-1)
             vals.append(safe_float(r.get(nc, 0)))
+            # Tooltip value: from raw column if available, else _norm col
             rc = raw_col_map[nc]
-            raws.append(fmt_raw(rc, r.get(rc, r.get(nc, 0))))
+            raw_val = r.get(rc, r.get(nc, 0))
+            raws.append(fmt_raw(rc, raw_val))
         return vals, raws
 
     p_vals, p_raws = player_vals(row)
@@ -965,29 +957,36 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
 
             pdf2["Picks"] = pd.to_numeric(pdf2["Picks"], errors="coerce").fillna(0)
 
-            # Get odds for that year from hist_odds
+            # Get odds for that year — try multiple sources
             odds_for_year = pd.Series(dtype=float)
-            if not hist_odds.empty and "odds" in hist_odds.columns:
+
+            # Source 1: hist_odds participant→golfer/odds columns
+            if not hist_odds.empty:
                 ho = hist_odds.copy()
                 if "year" in ho.columns:
-                    ho = ho[pd.to_numeric(ho["year"],errors="coerce") == yr_int]
-                # Build player name col for odds
-                if "participant" in ho.columns:
-                    # hist_odds has participant/golfer_1/odds1 structure — use golfer names
-                    golfer_cols = [c for c in ho.columns if c.startswith("golfer_")]
-                    odds_cols   = [c for c in ho.columns if c.startswith("odds") and c != "combined_odds"]
-                    pairs = list(zip(golfer_cols, odds_cols))
-                    rows = []
+                    ho = ho[pd.to_numeric(ho["year"], errors="coerce") == yr_int]
+                golfer_cols = [c for c in ho.columns if c.startswith("golfer_")]
+                odds_num_cols = sorted([c for c in ho.columns if c.startswith("odds") and c != "combined_odds"])
+                if golfer_cols and odds_num_cols:
+                    pairs = list(zip(golfer_cols, odds_num_cols))
+                    rows_o = []
                     for _, r in ho.iterrows():
                         for gc, oc in pairs:
-                            gname = str(r.get(gc,"")).strip()
+                            gname = str(r.get(gc, "")).strip()
                             oraw  = r.get(oc, np.nan)
-                            if gname and gname not in ["","nan","None"]:
-                                rows.append({"Player": gname, "odds_val": pd.to_numeric(oraw, errors="coerce")})
-                    if rows:
-                        odds_for_year = pd.DataFrame(rows).groupby("Player")["odds_val"].mean()
+                            if gname and gname not in ["", "nan", "None", "NaN"]:
+                                rows_o.append({"Player": gname, "odds_val": pd.to_numeric(oraw, errors="coerce")})
+                    if rows_o:
+                        odds_for_year = pd.DataFrame(rows_o).groupby("Player")["odds_val"].mean()
                 elif "_name" in ho.columns and "odds" in ho.columns:
                     odds_for_year = pd.to_numeric(ho.set_index("_name")["odds"], errors="coerce")
+
+            # Source 2: fallback — look for an odds column directly in hist_picks
+            if odds_for_year.empty or odds_for_year.isna().all():
+                odds_col_p = next((c for c in pdf.columns if "odds" in c and "combined" not in c), None)
+                if odds_col_p:
+                    pdf["_odds_tmp"] = pd.to_numeric(pdf[odds_col_p], errors="coerce")
+                    odds_for_year = pdf.groupby("_name")["_odds_tmp"].mean()
 
             pdf2["Odds"] = pdf2["Player"].map(odds_for_year) if len(odds_for_year) > 0 else np.nan
 
@@ -1066,12 +1065,9 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
                         column_config={"Pick":st.column_config.TextColumn("Pick"),
                                        "Player":st.column_config.TextColumn("Player"),
                                        "Odds":st.column_config.TextColumn("Odds")})
-                    st.markdown(f"""<div class="bio-card" style="padding:12px 16px;margin-top:8px;display:flex;gap:32px;">
-                        <div><div class="section-header" style="border:none;margin-bottom:2px;">COMBINED ODDS</div>
-                             <div style="font-family:'Playfair Display';font-size:24px;font-weight:900;color:var(--green);">{combined_disp}</div></div>
-                        <div style="display:flex;align-items:center;">
-                            {'<span style="font-family:\'DM Mono\';font-size:12px;color:#4ade80;">✓ Valid entry (≥ 150)</span>' if combined and str(combined) not in ["","nan","None"] and float(combined) >= 150 else '<span style="font-family:\'DM Mono\';font-size:12px;color:#f87171;">⚠ Below 150 minimum</span>'}
-                        </div>
+                    st.markdown(f"""<div class="bio-card" style="padding:12px 16px;margin-top:8px;">
+                        <div class="section-header" style="border:none;margin-bottom:2px;">COMBINED ODDS</div>
+                        <div style="font-family:'Playfair Display';font-size:24px;font-weight:900;color:var(--green);">{combined_disp}</div>
                     </div>""", unsafe_allow_html=True)
                 else:
                     st.info("No golfer picks found for this participant.")
@@ -1170,35 +1166,23 @@ def main():
     page = st.session_state.page
 
     if page == "Player Picker":
-        st.markdown(f"""<div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
-            {MASTERS_LOGO_SVG}
-            <div><div class="page-title">Player Picker</div>
-            <div class="page-subtitle">Masters 2026 · Build your 3-man team · Min. 150 combined odds</div></div>
-        </div>""", unsafe_allow_html=True)
+        st.title("⛳ Player Picker")
+        st.caption("Masters 2026 · Build your 3-man team · Min. 150 combined odds")
         st.markdown("<br>", unsafe_allow_html=True)
         render_player_picker(df, filters)
     elif page == "Player Profile":
-        st.markdown(f"""<div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
-            {MASTERS_LOGO_SVG}
-            <div><div class="page-title">Player Profile</div>
-            <div class="page-subtitle">Detailed stats · Augusta record · Performance radar</div></div>
-        </div>""", unsafe_allow_html=True)
+        st.title("👤 Player Profile")
+        st.caption("Detailed stats · Augusta record · Performance radar")
         st.markdown("<br>", unsafe_allow_html=True)
         render_player_profile(df, available_images)
     elif page == "Score & Risk":
-        st.markdown(f"""<div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
-            {MASTERS_LOGO_SVG}
-            <div><div class="page-title">Score & Risk</div>
-            <div class="page-subtitle">Field overview · Value vs odds · Risk analysis</div></div>
-        </div>""", unsafe_allow_html=True)
+        st.title("📈 Score & Risk")
+        st.caption("Field overview · Value vs odds · Risk analysis")
         st.markdown("<br>", unsafe_allow_html=True)
         render_score_risk_overview(df)
     elif page == "Historical Dashboard":
-        st.markdown(f"""<div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
-            {MASTERS_LOGO_SVG}
-            <div><div class="page-title">Historical Dashboard</div>
-            <div class="page-subtitle">Trends, picks & winners across previous years</div></div>
-        </div>""", unsafe_allow_html=True)
+        st.title("📊 Historical Dashboard")
+        st.caption("Trends, picks & winners across previous years")
         st.markdown("<br>", unsafe_allow_html=True)
         render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rounds, hist_teams)
 
