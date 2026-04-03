@@ -314,6 +314,8 @@ def load_players():
     for col in pct_cols:
         if col in df.columns and df[col].dropna().max() <= 1.0:
             df[col] = df[col] * 100
+    # Remove withdrawn players
+    df = df[~((df["first_name"].str.lower() == "phil") & (df["last_name"].str.lower() == "mickelson"))]
     df = compute_value_scores(df)
     df["risk"] = df["odds"].apply(classify_risk)
     df["implied_prob"] = 1 / (df["odds"] + 1)
@@ -445,7 +447,7 @@ def suggest_completions(df, selected_ids, top_n=5):
         needed_total = max(0, 150 - current_odds)
         candidates = candidates[candidates["odds"] >= needed_total * 0.3]
 
-    return candidates.sort_values("value_score", ascending=False).head(top_n)
+    return candidates.sort_values("odds", ascending=True).head(top_n)
 
 # ─────────────────────────────────────────────
 # SESSION STATE
@@ -570,6 +572,12 @@ def render_player_picker(df, filters):
             format_func=lambda x: x.replace("_", " ").title(),
             label_visibility="collapsed",
         )
+        if sort_col == "avg_round":
+        # Rookies (avg_round == 0) always go to the bottom
+        rookies = fdf[fdf["avg_round"] == 0]
+        non_rookies = fdf[fdf["avg_round"] != 0].sort_values("avg_round", ascending=True)
+        fdf = pd.concat([non_rookies, rookies])
+    else:
         fdf = fdf.sort_values(sort_col, ascending=SORT_ASC.get(sort_col, True))
 
         for _, row in fdf.iterrows():
@@ -580,7 +588,7 @@ def render_player_picker(df, filters):
             col_a, col_b = st.columns([4, 1])
             with col_a:
                 best = int(row.get("best_finish_position", 0))
-                best_str = f"T{best}" if best > 0 else "—"
+                best_str = str(best) if best > 0 else "Rookie"
                 st.markdown(f"""
                 <div class="player-card" style="{card_border}">
                     <div class="name">{row['first_name']} {row['last_name']}</div>
@@ -700,6 +708,21 @@ def render_team_panel(df):
                 ✓ Valid team — ready to submit.
             </div>
             """, unsafe_allow_html=True)
+            st.markdown("""
+            <div style="margin-top:10px;text-align:center;">
+                <a href="https://eoghanobrien-bit.github.io/masters-sweepstake/"
+                   target="_blank"
+                   style="display:inline-block;padding:10px 20px;
+                          background:rgba(74,222,128,0.12);
+                          border:1px solid rgba(74,222,128,0.5);
+                          border-radius:6px;
+                          font-family:'DM Mono';font-size:12px;
+                          color:#4ade80;text-decoration:none;
+                          letter-spacing:0.06em;">
+                    ⛳ Submit your team →
+                </a>
+            </div>
+            """, unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -773,20 +796,23 @@ def render_player_profile(df, available_images):
             """, unsafe_allow_html=True)
 
     with top_mid:
+        _world_rank = f" &nbsp;·&nbsp; World Rank #{int(row['world_ranking'])}" if pd.notna(row.get('world_ranking')) else ""
+        _bio_val = str(row.get('overview', row.get('bio', '')))
+        _bio_html = f'<div style="font-family:DM Sans;font-size:13px;color:var(--text-muted);margin-top:10px;line-height:1.5;">{_bio_val}</div>' if _bio_val not in ['', 'nan', 'None'] else ''
+        _badge = risk_badge_html(row['risk'])
         st.markdown(f"""
         <div style="padding-top: 8px;">
             <div style="font-family:'Playfair Display';font-size:32px;font-weight:900;line-height:1.1;">
                 {row['first_name']} {row['last_name']}
             </div>
             <div style="font-family:'DM Mono';font-size:11px;color:var(--text-muted);margin-top:6px;letter-spacing:0.08em;">
-                {row.get('country','—')} &nbsp;·&nbsp; Age {int(row['age'])}
-                {f" &nbsp;·&nbsp; World Rank #{int(row['world_ranking'])}" if pd.notna(row.get('world_ranking')) else ""}
+                {row.get('country','—')} &nbsp;·&nbsp; Age {int(row['age'])}{_world_rank}
             </div>
             <div style="margin-top:10px;">
-                {risk_badge_html(row['risk'])}
+                {_badge}
                 <span style="font-family:'Playfair Display';font-size:28px;font-weight:900;color:var(--green);margin-left:16px;">{int(row['odds'])}/1</span>
             </div>
-            {f'<div style="font-family:DM Sans;font-size:13px;color:var(--text-muted);margin-top:10px;line-height:1.5;">{row["bio"]}</div>' if pd.notna(row.get('bio')) and str(row.get('bio','')) not in ['','nan'] else ''}
+            {_bio_html}
         </div>
         """, unsafe_allow_html=True)
 
@@ -892,52 +918,16 @@ def _render_profile_overview(row, df):
         """, unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="section-header">2025/26 Season Form</div>', unsafe_allow_html=True)
-
-        season_fields = [
-            ("season_wins", "Season Wins"),
-            ("season_top10s", "Top 10s"),
-            ("season_top25s", "Top 25s"),
-            ("season_events", "Events Played"),
-            ("season_cuts_made", "Cuts Made"),
-            ("season_earnings", "Earnings ($)"),
-            ("scoring_avg", "Scoring Average"),
-            ("driving_distance", "Driving Distance (yds)"),
-            ("driving_accuracy_percentage", "Driving Accuracy"),
-            ("greens_in_regulation_percentage", "GIR %"),
-            ("putts_per_round", "Putts / Round"),
-            ("scrambling_percentage", "Scrambling %"),
-            ("strokes_gained_total", "SG: Total"),
-            ("strokes_gained_off_tee", "SG: Off Tee"),
-            ("strokes_gained_approach", "SG: Approach"),
-            ("strokes_gained_around_green", "SG: Around Green"),
-            ("strokes_gained_putting", "SG: Putting"),
-        ]
-
-        found_any = False
-        for col_name, label in season_fields:
-            val = row.get(col_name)
-            if val is not None and not (isinstance(val, float) and np.isnan(val)):
-                # Format percentages
-                if "percentage" in col_name and isinstance(val, (int, float)):
-                    display_val = f"{val:.1f}%"
-                elif "earnings" in col_name and isinstance(val, (int, float)):
-                    display_val = f"${val:,.0f}"
-                elif "strokes_gained" in col_name and isinstance(val, (int, float)):
-                    color = "#4ade80" if val > 0 else "#f87171"
-                    display_val = f'<span style="color:{color};">{val:+.3f}</span>'
-                else:
-                    display_val = f"{val}" if not isinstance(val, float) else f"{val:.2f}"
-                st.markdown(f"""
-                <div class="stat-row">
-                    <span class="label">{label.upper()}</span>
-                    <span class="value" style="font-family:'DM Mono';">{display_val}</span>
-                </div>
-                """, unsafe_allow_html=True)
-                found_any = True
-
-        if not found_any:
-            st.info("No season form data available for this player.")
+        st.markdown('<div class="section-header">About</div>', unsafe_allow_html=True)
+        overview_text = str(row.get('overview', row.get('bio', '')))
+        if overview_text not in ['', 'nan', 'None']:
+            st.markdown(f'''
+            <div class="bio-card" style="line-height:1.7;font-size:14px;color:var(--text-muted);">
+                {overview_text}
+            </div>
+            ''', unsafe_allow_html=True)
+        else:
+            st.info("No biography available for this player.")
 
 
 def _render_profile_stats(row, df):
@@ -960,8 +950,8 @@ def _render_profile_stats(row, df):
             val = row.get(col_name)
             if val is not None and not (isinstance(val, float) and np.isnan(val)):
                 if col_name == "best_finish_position":
-                    bv = int(val) if val > 0 else None
-                    display_val = f"T{bv}" if bv else "—"
+                    bv = int(val)
+                    display_val = str(bv) if bv > 0 else "Rookie"
                 elif "percentage" in col_name:
                     display_val = f"{val:.1f}%"
                 elif "avg_round" in col_name:
@@ -1050,7 +1040,7 @@ def _render_profile_masters(row, df):
     metrics = [
         ("Masters Wins", "masters_wins", int),
         ("Appearances", "masters_appearances", int),
-        ("Best Finish", "best_finish_position", lambda v: f"T{int(v)}" if v > 0 else "—"),
+        ("Best Finish", "best_finish_position", lambda v: str(int(v)) if int(v) > 0 else "Rookie"),
         ("Cuts Made %", "cuts_made_percentage", lambda v: f"{v:.0f}%"),
         ("Avg Round", "avg_round", lambda v: f"{v:.2f}"),
         ("Rounds Under Par %", "rounds_under_par_percentage", lambda v: f"{v:.0f}%"),
@@ -1064,104 +1054,84 @@ def _render_profile_masters(row, df):
                 display = fmt(val)
                 st.metric(label, display)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # Round-by-round scoring distribution vs field avg
-    st.markdown('<div class="section-header">Scoring vs Field Average</div>', unsafe_allow_html=True)
-
-    round_cols = [c for c in row.index if c.startswith("round_") and "avg" in c.lower()]
-    if round_cols:
-        rd_labels = [c.replace("_avg", "").replace("round_", "Round ").title() for c in round_cols]
-        rd_vals = [row[c] for c in round_cols]
-        field_avgs = [df[c].mean() for c in round_cols]
-
-        fig = go.Figure()
-        fig.add_trace(go.Bar(
-            x=rd_labels, y=rd_vals,
-            name=f"{row['first_name']} {row['last_name']}",
-            marker_color="#4ade80",
-        ))
-        fig.add_trace(go.Scatter(
-            x=rd_labels, y=field_avgs,
-            name="Field Average",
-            mode="lines+markers",
-            line=dict(color="#fbbf24", width=2, dash="dot"),
-            marker=dict(color="#fbbf24", size=6),
-        ))
-        fig.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(17,24,17,0.4)",
-            font=dict(family="DM Sans", color="#e8f0e8", size=11),
-            xaxis=dict(gridcolor="rgba(74,222,128,0.08)"),
-            yaxis=dict(gridcolor="rgba(74,222,128,0.08)", title="Avg Score"),
-            margin=dict(l=40, r=20, t=30, b=40),
-            height=300,
-            legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(size=10)),
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        # Value score vs field bar
-        sorted_df = df.sort_values("value_score", ascending=False).reset_index(drop=True)
-        player_rank = sorted_df[sorted_df["id"] == row["id"]].index
-        player_rank_val = int(player_rank[0]) + 1 if len(player_rank) > 0 else "—"
-        st.info(f"No per-round averages found in player data. {row['first_name']} {row['last_name']} ranks **#{player_rank_val}** by value score in the field.")
 
 
 def _render_profile_radar(row, df):
-    """Performance radar using _norm columns."""
+    """Performance radar using _norm columns, with optional player comparison."""
     norm_cols = [c for c in df.columns if c.endswith("_norm")]
-    if norm_cols:
-        values = [row[c] for c in norm_cols]
-        labels = [c.replace("_norm", "").replace("_", " ").title() for c in norm_cols]
-        values_closed = values + [values[0]]
-        labels_closed = labels + [labels[0]]
-
-        # Also compute field average for comparison
-        field_avgs = [df[c].mean() for c in norm_cols] + [df[norm_cols[0]].mean()]
-
-        fig = go.Figure()
-        fig.add_trace(go.Scatterpolar(
-            r=field_avgs,
-            theta=labels_closed,
-            fill="toself",
-            fillcolor="rgba(251,191,36,0.06)",
-            line=dict(color="#fbbf24", width=1.5, dash="dot"),
-            name="Field Average",
-        ))
-        fig.add_trace(go.Scatterpolar(
-            r=values_closed,
-            theta=labels_closed,
-            fill="toself",
-            fillcolor="rgba(74,222,128,0.12)",
-            line=dict(color="#4ade80", width=2),
-            marker=dict(color="#4ade80", size=5),
-            name=f"{row['first_name']} {row['last_name']}",
-        ))
-        fig.update_layout(
-            polar=dict(
-                bgcolor="rgba(17,24,17,0)",
-                radialaxis=dict(
-                    visible=True, range=[0, 1],
-                    gridcolor="rgba(74,222,128,0.15)",
-                    linecolor="rgba(74,222,128,0.15)",
-                    tickfont=dict(color="#7a9a7a", size=9, family="DM Mono"),
-                ),
-                angularaxis=dict(
-                    gridcolor="rgba(74,222,128,0.12)",
-                    linecolor="rgba(74,222,128,0.12)",
-                    tickfont=dict(color="#e8f0e8", size=10, family="DM Sans"),
-                ),
-            ),
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            margin=dict(l=60, r=60, t=40, b=40),
-            height=480,
-            showlegend=True,
-            legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#e8f0e8", size=10)),
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    else:
+    if not norm_cols:
         st.info("No normalised (_norm) columns found in player data.")
+        return
+
+    # Comparison player selector
+    player_options = ["Field Average"] + df.apply(lambda r: f"{r['first_name']} {r['last_name']}", axis=1).tolist()
+    compare_label = st.selectbox(
+        "Compare against",
+        player_options,
+        index=0,
+        key="radar_compare",
+    )
+
+    labels = [c.replace("_norm", "").replace("_", " ").title() for c in norm_cols]
+    values = [row[c] for c in norm_cols]
+    values_closed = values + [values[0]]
+    labels_closed = labels + [labels[0]]
+
+    if compare_label == "Field Average":
+        compare_vals = [df[c].mean() for c in norm_cols]
+        compare_name = "Field Average"
+        compare_color = "#fbbf24"
+        compare_fill = "rgba(251,191,36,0.06)"
+    else:
+        compare_row = df[df.apply(lambda r: f"{r['first_name']} {r['last_name']}" == compare_label, axis=1)].iloc[0]
+        compare_vals = [compare_row[c] for c in norm_cols]
+        compare_name = compare_label
+        compare_color = "#f87171"
+        compare_fill = "rgba(248,113,113,0.06)"
+
+    compare_closed = compare_vals + [compare_vals[0]]
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatterpolar(
+        r=compare_closed,
+        theta=labels_closed,
+        fill="toself",
+        fillcolor=compare_fill,
+        line=dict(color=compare_color, width=1.5, dash="dot"),
+        name=compare_name,
+    ))
+    fig.add_trace(go.Scatterpolar(
+        r=values_closed,
+        theta=labels_closed,
+        fill="toself",
+        fillcolor="rgba(74,222,128,0.12)",
+        line=dict(color="#4ade80", width=2),
+        marker=dict(color="#4ade80", size=5),
+        name=f"{row['first_name']} {row['last_name']}",
+    ))
+    fig.update_layout(
+        polar=dict(
+            bgcolor="rgba(17,24,17,0)",
+            radialaxis=dict(
+                visible=True, range=[0, 1],
+                gridcolor="rgba(74,222,128,0.15)",
+                linecolor="rgba(74,222,128,0.15)",
+                tickfont=dict(color="#7a9a7a", size=9, family="DM Mono"),
+            ),
+            angularaxis=dict(
+                gridcolor="rgba(74,222,128,0.12)",
+                linecolor="rgba(74,222,128,0.12)",
+                tickfont=dict(color="#e8f0e8", size=10, family="DM Sans"),
+            ),
+        ),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=60, r=60, t=40, b=40),
+        height=480,
+        showlegend=True,
+        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#e8f0e8", size=10)),
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # ─────────────────────────────────────────────
