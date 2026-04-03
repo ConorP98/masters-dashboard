@@ -1,9 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 import os
-import numpy as np
 
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -16,309 +13,73 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# GLOBAL STYLES
+# STYLES
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
-
 :root {
-    --green:       #4ade80;
-    --green-dim:   #166534;
-    --green-glow:  rgba(74,222,128,0.15);
-    --bg:          #0a0f0a;
-    --surface:     #111811;
-    --surface2:    #182018;
-    --border:      rgba(74,222,128,0.18);
-    --text:        #e8f0e8;
-    --text-muted:  #7a9a7a;
-    --red:         #f87171;
-    --gold:        #fbbf24;
+  --surface: #ffffff;
+  --surface2: #f5f5f5;
+  --text: #111111;
+  --text-muted: #555555;
+  --green: #4ade80;
+  --red: #f87171;
+  --border: #e5e7eb;
 }
-
-html, body, [data-testid="stAppViewContainer"] {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-    font-family: 'DM Sans', sans-serif !important;
-}
-
-[data-testid="stSidebar"] {
-    background: var(--surface) !important;
-    border-right: 1px solid var(--border) !important;
-}
-
-[data-testid="stSidebar"] * { color: var(--text) !important; }
-
-h1, h2, h3 {
-    font-family: 'Playfair Display', serif !important;
-    color: var(--text) !important;
-}
-
-code, .mono {
-    font-family: 'DM Mono', monospace !important;
-}
-
-/* Metric cards */
-[data-testid="metric-container"] {
-    background: var(--surface2) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-}
-
-/* Buttons */
-.stButton > button {
-    background: transparent !important;
-    border: 1px solid var(--border) !important;
-    color: var(--green) !important;
-    font-family: 'DM Mono', monospace !important;
-    font-size: 12px !important;
-    letter-spacing: 0.05em !important;
-    border-radius: 4px !important;
-    transition: all 0.2s !important;
-}
-.stButton > button:hover {
-    background: var(--green-glow) !important;
-    border-color: var(--green) !important;
-}
-
-/* Dataframe */
-[data-testid="stDataFrame"] {
-    border: 1px solid var(--border) !important;
-    border-radius: 8px !important;
-}
-
-/* Slider */
-.stSlider > div > div > div {
-    background: var(--green-dim) !important;
-}
-.stSlider > div > div > div > div {
-    background: var(--green) !important;
-}
-
-/* Select */
-.stMultiSelect > div, .stSelectbox > div {
-    background: var(--surface2) !important;
-    border-color: var(--border) !important;
-}
-
-/* Divider */
-hr { border-color: var(--border) !important; }
-
-/* Nav pills */
-.nav-pill {
-    display: inline-block;
-    padding: 6px 18px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-right: 8px;
-}
-.nav-pill.active {
-    background: var(--green-glow);
-    border-color: var(--green);
-    color: var(--green);
-}
-
-/* Player card */
 .player-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 12px;
-    transition: border-color 0.2s;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:10px;
 }
-.player-card:hover { border-color: var(--green); }
-
-.player-card .name {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text);
-}
-.player-card .sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    margin-top: 2px;
-}
-.player-card .odds {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 900;
-    color: var(--green);
-}
-
-/* Risk badge */
-.badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 500;
-}
-.badge-safe     { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-.badge-balanced { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
-.badge-high     { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
-
-/* Team panel */
-.team-panel {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-}
-.team-panel.valid   { border-color: #4ade80; box-shadow: 0 0 20px rgba(74,222,128,0.1); }
-.team-panel.invalid { border-color: #f87171; box-shadow: 0 0 20px rgba(248,113,113,0.05); }
-
-/* Section header */
-.section-header {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-}
-
-/* Stat row */
-.stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(74,222,128,0.06);
-    font-size: 13px;
-}
-.stat-row .label { color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 11px; }
-.stat-row .value { color: var(--text); font-weight: 500; }
-
-/* Page title */
-.page-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    background: linear-gradient(135deg, #e8f0e8 0%, #4ade80 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.page-subtitle {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-top: 4px;
-}
-
-/* Profile headshot placeholder */
-.headshot-placeholder {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: var(--surface2);
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    color: var(--text-muted);
-}
-
-/* Scrollable table container */
-.scroll-container {
-    max-height: 500px;
-    overflow-y: auto;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
+.name { font-weight:700; font-size:16px; }
+.sub { font-size:12px; color:var(--text-muted); }
+.badge { padding:2px 6px; border-radius:4px; font-size:10px; font-weight:700;}
+.badge-safe { background:#4ade80;color:white;}
+.badge-balanced { background:#facc15;color:white;}
+.badge-high { background:#f87171;color:white;}
+.team-panel { padding:10px; border:1px solid var(--border); border-radius:6px; margin-bottom:20px;}
+.team-panel.valid { border-color:var(--green);}
+.team-panel.invalid { border-color:var(--red);}
+.stat-row { display:flex; justify-content:space-between; padding:2px 0;}
+.label { font-weight:600; color:var(--text-muted);}
+.value { font-weight:700; }
 </style>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # DATA LOADING
 # ─────────────────────────────────────────────
-
 @st.cache_data
 def load_players():
-    df = pd.read_csv("consolidated_player_data_2026.csv")
+    df = pd.read_csv("historical_player_data.csv")  # your actual CSV
     df = compute_value_scores(df)
     df["risk"] = df["odds"].apply(classify_risk)
     df["implied_prob"] = 1 / (df["odds"] + 1)
     return df
 
-@st.cache_data
-def load_historical_odds():
-    return pd.read_csv("historical_odds.csv")
-
-@st.cache_data
-def load_historical_scores():
-    return pd.read_csv("historical_scores.csv")
-
-@st.cache_data
-def load_historical_rounds():
-    return pd.read_csv("historical_rounds.csv")
-
-@st.cache_data
-def load_historical_teams():
-    return pd.read_csv("historical_teams.csv")
-
-@st.cache_data
-def load_historical_picks():
-    return pd.read_csv("historical_picks.csv")
-
-@st.cache_data
-def load_historical_winners():
-    return pd.read_csv("historical_previous_winners.csv")
-
 # ─────────────────────────────────────────────
 # BUSINESS LOGIC
 # ─────────────────────────────────────────────
-
 def minmax(series):
     mn, mx = series.min(), series.max()
     if mx == mn:
-        return pd.Series([0.5] * len(series), index=series.index)
+        return pd.Series([0.5]*len(series), index=series.index)
     return (series - mn) / (mx - mn)
 
 def compute_value_scores(df):
     df = df.copy()
-    cols_needed = ["avg_round", "cuts_made_percentage", "masters_wins",
-                   "rounds_under_par_percentage", "best_finish_position"]
+    cols_needed = ["avg_round","cuts_made_percentage","masters_wins","rounds_under_par_percentage","best_finish_position"]
     for c in cols_needed:
         if c not in df.columns:
             df[c] = 0
-
     df["_n_avg_round"]   = 1 - minmax(df["avg_round"])
     df["_n_cuts"]        = minmax(df["cuts_made_percentage"])
     df["_n_wins"]        = minmax(df["masters_wins"])
     df["_n_rup"]         = minmax(df["rounds_under_par_percentage"])
     df["_n_best_finish"] = 1 - minmax(df["best_finish_position"])
-
-    df["value_score"] = (
-        0.30 * df["_n_avg_round"] +
-        0.20 * df["_n_cuts"] +
-        0.20 * df["_n_wins"] +
-        0.15 * df["_n_rup"] +
-        0.15 * df["_n_best_finish"]
-    )
-    drop = [c for c in df.columns if c.startswith("_n_")]
-    df.drop(columns=drop, inplace=True)
+    df["value_score"] = (0.3*df["_n_avg_round"] + 0.2*df["_n_cuts"] + 0.2*df["_n_wins"] + 0.15*df["_n_rup"] + 0.15*df["_n_best_finish"])
+    df.drop(columns=[c for c in df.columns if c.startswith("_n_")], inplace=True)
     return df
 
 def classify_risk(odds):
@@ -329,7 +90,7 @@ def classify_risk(odds):
     return "High Risk"
 
 def risk_badge_html(risk):
-    cls = {"Safe": "badge-safe", "Balanced": "badge-balanced", "High Risk": "badge-high"}.get(risk, "badge-safe")
+    cls = {"Safe":"badge-safe","Balanced":"badge-balanced","High Risk":"badge-high"}.get(risk,"badge-safe")
     return f'<span class="badge {cls}">{risk}</span>'
 
 def team_strength(players_df):
@@ -341,7 +102,6 @@ def combined_odds(players_df):
 # ─────────────────────────────────────────────
 # SESSION STATE
 # ─────────────────────────────────────────────
-
 def init_state():
     if "selected_ids" not in st.session_state:
         st.session_state.selected_ids = []
@@ -349,128 +109,184 @@ def init_state():
         st.session_state.page = "Player Picker"
     if "profile_id" not in st.session_state:
         st.session_state.profile_id = None
-
 init_state()
 
 # ─────────────────────────────────────────────
-# SIDEBAR NAVIGATION
+# SIDEBAR
 # ─────────────────────────────────────────────
-st.sidebar.title("⛳ Masters 2026 Dashboard")
-page_options = ["Player Picker", "Player Profile", "Historical Dashboard"]
-
-for option in page_options:
-    active = "active" if st.session_state.page == option else ""
-    if st.sidebar.button(option):
-        st.session_state.page = option
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("Data & AI by Your Name | v1.0")
-
-# ─────────────────────────────────────────────
-# LOAD DATA
-# ─────────────────────────────────────────────
-players_df = load_players()
-historical_odds_df = load_historical_odds()
-historical_scores_df = load_historical_scores()
-historical_rounds_df = load_historical_rounds()
-historical_teams_df = load_historical_teams()
-historical_picks_df = load_historical_picks()
-historical_winners_df = load_historical_winners()
+def render_sidebar(df):
+    with st.sidebar:
+        st.markdown('<div class="page-title" style="font-size:24px;">⛳ Masters 2026</div>', unsafe_allow_html=True)
+        st.markdown('<div class="page-subtitle">Decision Support Tool</div>', unsafe_allow_html=True)
+        st.markdown("---")
+        st.markdown('<div class="section-header">Navigation</div>', unsafe_allow_html=True)
+        pages = ["Player Picker","Player Profile"]
+        for p in pages:
+            icon = {"Player Picker":"⬜","Player Profile":"👤"}[p]
+            if st.button(f"{icon} {p}", key=f"nav_{p}", use_container_width=True):
+                st.session_state.page = p
+                st.rerun()
+        st.markdown("---")
+        if st.session_state.page=="Player Picker":
+            st.markdown('<div class="section-header">Filters</div>', unsafe_allow_html=True)
+            odds_min, odds_max = int(df["odds"].min()), int(df["odds"].max())
+            odds_range = st.slider("Odds range", odds_min, odds_max, (odds_min, odds_max))
+            age_min, age_max = int(df["age"].min()), int(df["age"].max())
+            age_range = st.slider("Age range", age_min, age_max, (age_min, age_max))
+            countries = sorted(df["country"].dropna().unique().tolist())
+            selected_countries = st.multiselect("Country", countries)
+            masters_winners_only = st.toggle("Masters winners only", value=False)
+            cuts_min, cuts_max = float(df["cuts_made_percentage"].min()), float(df["cuts_made_percentage"].max())
+            cuts_range = st.slider("Cuts made %", cuts_min, cuts_max, (cuts_min, cuts_max))
+            return {
+                "odds_range": odds_range,
+                "age_range": age_range,
+                "countries": selected_countries,
+                "masters_winners_only": masters_winners_only,
+                "cuts_range": cuts_range
+            }
+    return {}
 
 # ─────────────────────────────────────────────
 # PLAYER PICKER PAGE
 # ─────────────────────────────────────────────
-if st.session_state.page == "Player Picker":
-    st.markdown('<div class="page-title">Player Picker</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Select your Masters 2026 team</div>', unsafe_allow_html=True)
-    st.markdown("---")
+def render_player_picker(df, filters):
+    fdf = df[df["odds"].between(*filters["odds_range"])]
+    fdf = fdf[fdf["age"].between(*filters["age_range"])]
+    if filters["countries"]:
+        fdf = fdf[fdf["country"].isin(filters["countries"])]
+    if filters["masters_winners_only"]:
+        fdf = fdf[df["masters_wins"]>0]
+    fdf = fdf[fdf["cuts_made_percentage"].between(*filters["cuts_range"])]
 
-    search_name = st.text_input("Search player by name")
-    if search_name:
-        display_df = players_df[players_df["name"].str.contains(search_name, case=False, na=False)]
+    left_col,right_col = st.columns([2,1], gap="large")
+    with left_col:
+        st.markdown('<div class="section-header">Player Pool</div>', unsafe_allow_html=True)
+        st.caption(f"{len(fdf)} players · {len(st.session_state.selected_ids)}/3 selected")
+        sort_col = st.selectbox("Sort by", ["odds","value_score","age","cuts_made_percentage","masters_wins"], label_visibility="collapsed")
+        fdf = fdf.sort_values(sort_col, ascending=(sort_col=="odds"))
+        for _, row in fdf.iterrows():
+            pid=row["id"]
+            is_selected = pid in st.session_state.selected_ids
+            col_a,col_b = st.columns([4,1])
+            with col_a:
+                st.markdown(f"""
+                <div class="player-card">
+                    <div class="name">{row['first_name']} {row['last_name']}</div>
+                    <div class="sub">{row.get('country','—')} · Age {int(row['age'])} · {risk_badge_html(row['risk'])}</div>
+                    <div style="display:flex;gap:12px;margin-top:8px;">
+                        <div><div class="sub">ODDS</div><div>{int(row['odds'])}/1</div></div>
+                        <div><div class="sub">VALUE</div><div>{row['value_score']:.3f}</div></div>
+                        <div><div class="sub">CUTS MADE</div><div>{row['cuts_made_percentage']:.0f}%</div></div>
+                        <div><div class="sub">AVG RND</div><div>{row['avg_round']:.1f}</div></div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            with col_b:
+                if is_selected:
+                    if st.button("✕ Remove", key=f"rem_{pid}"): 
+                        st.session_state.selected_ids.remove(pid)
+                        st.rerun()
+                    if st.button("Profile →", key=f"prof_{pid}"):
+                        st.session_state.profile_id = pid
+                        st.session_state.page = "Player Profile"
+                        st.rerun()
+                else:
+                    disabled = len(st.session_state.selected_ids)>=3
+                    if st.button("+ Add", key=f"add_{pid}", disabled=disabled):
+                        st.session_state.selected_ids.append(pid)
+                        st.rerun()
+    with right_col:
+        render_team_panel(df)
+
+def render_team_panel(df):
+    st.markdown('<div class="section-header">Your Team</div>', unsafe_allow_html=True)
+    selected_df = df[df["id"].isin(st.session_state.selected_ids)]
+    n = len(st.session_state.selected_ids)
+    c_odds = combined_odds(selected_df) if n>0 else 0
+    t_strength = team_strength(selected_df) if n>0 else 0
+    is_valid = (n==3) and (c_odds>=150)
+    panel_cls = "valid" if is_valid else ("invalid" if n==3 else "")
+    st.markdown(f'<div class="team-panel {panel_cls}">', unsafe_allow_html=True)
+    if n==0:
+        st.markdown('<div style="text-align:center;padding:20px;color:var(--text-muted);">Select 3 golfers to build your team</div>', unsafe_allow_html=True)
     else:
-        display_df = players_df.copy()
-
-    st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
-    for idx, row in display_df.iterrows():
-        selected = idx in st.session_state.selected_ids
-        col1, col2 = st.columns([3,1])
-        with col1:
-            st.markdown(f'<div class="player-card">', unsafe_allow_html=True)
-            st.markdown(f'<div class="name">{row["name"]}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="sub">{row["nationality"]} | Age {row.get("age","-")}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="odds">{row["odds"]}x</div>', unsafe_allow_html=True)
-            st.markdown(risk_badge_html(row["risk"]), unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        with col2:
-            if selected:
-                if st.button("Remove", key=f"remove_{idx}"):
-                    st.session_state.selected_ids.remove(idx)
-            else:
-                if st.button("Add", key=f"add_{idx}"):
-                    st.session_state.selected_ids.append(idx)
+        for _,row in selected_df.iterrows():
+            st.markdown(f"""
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);">
+                <div>
+                    <div style="font-weight:700;">{row['first_name']} {row['last_name']}</div>
+                    <div style="font-size:10px;color:var(--text-muted);">{risk_badge_html(row['risk'])} · score: {row['value_score']:.3f}</div>
+                </div>
+                <div style="font-weight:900;color:var(--green);">{int(row['odds'])}/1</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="stat-row"><span class="label">COMBINED ODDS</span><span class="value" style="color:{'#4ade80' if c_odds>=150 else '#f87171'};">{int(c_odds)}</span></div>
+        <div class="stat-row"><span class="label">TEAM STRENGTH</span><span class="value">{t_strength:.3f}</span></div>
+        <div class="stat-row"><span class="label">SLOTS FILLED</span><span class="value">{n} / 3</span></div>
+        """, unsafe_allow_html=True)
+        if n==3 and not is_valid:
+            st.markdown("""<div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.3);border-radius:6px;padding:10px;color:#f87171;">⚠ Combined odds must be ≥ 150 for a valid entry.</div>""", unsafe_allow_html=True)
+        elif is_valid:
+            st.markdown("""<div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:10px;color:#4ade80;">✓ Valid team — ready to submit.</div>""", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown("---")
-    st.write(f"Selected Players: {len(st.session_state.selected_ids)}")
-    if st.session_state.selected_ids:
-        team_df = players_df.loc[st.session_state.selected_ids]
-        st.write(team_df[["name","odds","risk","value_score"]])
-        st.write(f"Team Strength: {team_strength(team_df):.2f}")
-        st.write(f"Combined Odds: {combined_odds(team_df):.2f}")
+    if n>0:
+        if st.button("Clear team", use_container_width=True):
+            st.session_state.selected_ids = []
+            st.rerun()
 
 # ─────────────────────────────────────────────
 # PLAYER PROFILE PAGE
 # ─────────────────────────────────────────────
-elif st.session_state.page == "Player Profile":
-    st.markdown('<div class="page-title">Player Profile</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Individual player stats & history</div>', unsafe_allow_html=True)
-    st.markdown("---")
+def render_player_profile(df):
+    player_options = df.apply(lambda r: f"{r['first_name']} {r['last_name']}", axis=1).tolist()
+    player_ids = df["id"].tolist()
+    default_idx = player_ids.index(st.session_state.profile_id) if st.session_state.profile_id in player_ids else 0
+    chosen_label = st.selectbox("Select player", player_options, index=default_idx)
+    row = df.iloc[player_options.index(chosen_label)]
+    st.session_state.profile_id = row["id"]
 
-    player_name = st.selectbox("Select Player", players_df["name"].tolist())
-    profile = players_df[players_df["name"] == player_name].iloc[0]
+    left, right = st.columns([1,2], gap="large")
+    with left:
+        img_path = f"images/{row['first_name']} {row['last_name']}.jpg"
+        if os.path.exists(img_path):
+            st.image(img_path, width=180)
+        else:
+            initials = f"{row['first_name'][0]}{row['last_name'][0]}"
+            st.markdown(f"<div style='width:120px;height:120px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--text-muted);'>{initials}</div>", unsafe_allow_html=True)
 
-    st.markdown('<div class="headshot-placeholder">', unsafe_allow_html=True)
-    st.markdown(profile["name"][0], unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+        stats = [
+            ("Odds", f"{int(row['odds'])}/1"),
+            ("Value Score", f"{row['value_score']:.3f}"),
+            ("Masters Wins", f"{int(row.get('masters_wins',0))}"),
+            ("Cuts Made", f"{row.get('cuts_made_percentage',0):.0f}%"),
+            ("Avg Round", f"{row.get('avg_round',0):.2f}"),
+            ("Rounds Under Par %", f"{row.get('rounds_under_par_percentage',0):.1f}%"),
+            ("Best Finish Pos", f"{row.get('best_finish_position','-')}"),
+            ("Money Earned", f"${row.get('money_earned',0):,.0f}"),
+            ("Implied Prob", f"{row['implied_prob']*100:.1f}%")
+        ]
+        for label,val in stats:
+            st.markdown(f"<div class='stat-row'><span class='label'>{label}</span><span class='value'>{val}</span></div>", unsafe_allow_html=True)
 
-    st.write(f"**Nationality:** {profile['nationality']}")
-    st.write(f"**Age:** {profile.get('age','-')}")
-    st.write(f"**Masters Wins:** {profile.get('masters_wins',0)}")
-    st.write(f"**Value Score:** {profile.get('value_score',0):.2f}")
-    st.write(f"**Odds:** {profile.get('odds',0)}")
-    st.write(f"**Risk:** {profile.get('risk','-')}")
-
-    st.markdown("### Historical Performance")
-    hist_scores = historical_scores_df[historical_scores_df["Golfer"] == player_name]
-    if not hist_scores.empty:
-        fig = px.line(hist_scores, x="Year", y="Score", title=f"{player_name} Score History")
-        st.plotly_chart(fig)
-    else:
-        st.write("No historical score data available.")
+        if row["id"] not in st.session_state.selected_ids:
+            if len(st.session_state.selected_ids)<3:
+                if st.button("+ Add to team", use_container_width=True):
+                    st.session_state.selected_ids.append(row["id"])
+                    st.rerun()
+        else:
+            if st.button("✕ Remove from team", use_container_width=True):
+                st.session_state.selected_ids.remove(row["id"])
+                st.rerun()
 
 # ─────────────────────────────────────────────
-# HISTORICAL DASHBOARD PAGE
+# MAIN
 # ─────────────────────────────────────────────
-elif st.session_state.page == "Historical Dashboard":
-    st.markdown('<div class="page-title">Historical Masters Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Past winners, team stats, odds & performance trends</div>', unsafe_allow_html=True)
-    st.markdown("---")
+players_df = load_players()
+filters = render_sidebar(players_df)
 
-    tab1, tab2, tab3 = st.tabs(["Winners", "Teams", "Odds Trend"])
-
-    with tab1:
-        st.write(historical_winners_df.sort_values("Year", ascending=False))
-
-    with tab2:
-        fig = px.bar(historical_teams_df, x="Year", y="Team_Score", color="Team_Name",
-                     title="Historical Team Scores by Year")
-        st.plotly_chart(fig)
-
-    with tab3:
-        fig = go.Figure()
-        for player in historical_odds_df["Golfer"].unique():
-            temp = historical_odds_df[historical_odds_df["Golfer"] == player]
-            fig.add_trace(go.Scatter(x=temp["Year"], y=temp["Odds"], mode="lines+markers", name=player))
-        fig.update_layout(title="Historical Odds by Player", xaxis_title="Year", yaxis_title="Odds")
-        st.plotly_chart(fig)
+if st.session_state.page=="Player Picker":
+    render_player_picker(players_df, filters)
+elif st.session_state.page=="Player Profile":
+    render_player_profile(players_df)
