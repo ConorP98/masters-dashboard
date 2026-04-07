@@ -16,10 +16,10 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
 :root {
-    --green:#4ade80;--green-dim:#166534;--green-glow:rgba(74,222,128,0.15);
-    --bg:#0a0f0a;--surface:#111811;--surface2:#182018;
-    --border:rgba(74,222,128,0.18);--text:#ffffff;--text-muted:#a0b8a0;
-    --red:#f87171;--gold:#fbbf24;
+    --green:#FEF102;--green-dim:#0e4f38;--green-glow:rgba(254,241,2,0.12);
+    --bg:#166D4D;--surface:#0e4f38;--surface2:#1a5e42;
+    --border:rgba(254,241,2,0.35);--text:#ffffff;--text-muted:#b8d4c8;
+    --red:#f87171;--gold:#FEF102;
 }
 html,body,[data-testid="stAppViewContainer"]{background:var(--bg)!important;color:#ffffff!important;font-family:'DM Sans',sans-serif!important;}
 [data-testid="stSidebar"]{background:var(--surface)!important;border-right:1px solid var(--border)!important;}
@@ -27,21 +27,21 @@ html,body,[data-testid="stAppViewContainer"]{background:var(--bg)!important;colo
 [data-testid="stSidebar"] label,[data-testid="stSidebar"] .stNumberInput label,
 [data-testid="stSidebar"] .stMultiSelect label,[data-testid="stSidebar"] .stSelectbox label,
 [data-testid="stSidebar"] .stToggle label{color:#ffffff!important;font-family:'DM Mono',monospace!important;font-size:11px!important;}
-[data-testid="stSidebar"] input[type="number"]{background:#182018!important;color:#ffffff!important;border:1px solid rgba(74,222,128,0.3)!important;border-radius:4px!important;}
+[data-testid="stSidebar"] input[type="number"]{background:#1a5e42!important;color:#ffffff!important;border:1px solid rgba(254,241,2,0.4)!important;border-radius:4px!important;}
 /* ── Selectbox / dropdown dark fix ── */
-div[data-baseweb="select"] > div{background:#182018!important;color:#ffffff!important;border-color:rgba(74,222,128,0.3)!important;}
+div[data-baseweb="select"] > div{background:#1a5e42!important;color:#ffffff!important;border-color:rgba(254,241,2,0.4)!important;}
 div[data-baseweb="select"] span,div[data-baseweb="select"] div,div[data-baseweb="select"] input{color:#ffffff!important;background:transparent!important;}
-div[data-baseweb="popover"] *,div[data-baseweb="menu"] *{background:#1e2a1e!important;color:#ffffff!important;}
-div[data-baseweb="menu"] li:hover,div[data-baseweb="popover"] li:hover{background:#2a3a2a!important;}
-div[data-baseweb="tag"]{background:#1e4d1e!important;color:#4ade80!important;}
-ul[data-baseweb="menu"]{background:#1e2a1e!important;}
+div[data-baseweb="popover"] *,div[data-baseweb="menu"] *{background:#1a5e42!important;color:#ffffff!important;}
+div[data-baseweb="menu"] li:hover,div[data-baseweb="popover"] li:hover{background:#0e4f38!important;}
+div[data-baseweb="tag"]{background:#0e4f38!important;color:#FEF102!important;}
+ul[data-baseweb="menu"]{background:#1a5e42!important;}
 /* Radio */
 [data-testid="stRadio"] label,[data-testid="stRadio"] *{color:#ffffff!important;}
 p,li,span,div,td,th,label{color:#ffffff;}
 h1,h2,h3{font-family:'Playfair Display',serif!important;color:#ffffff!important;}
 /* Metric cards */
-[data-testid="metric-container"]{background:#1e2a1e!important;border:1px solid var(--border)!important;border-radius:8px!important;padding:16px!important;}
-[data-testid="metric-container"] [data-testid="stMetricValue"]{color:#4ade80!important;font-size:2rem!important;font-weight:700!important;}
+[data-testid="metric-container"]{background:#1a5e42!important;border:1px solid var(--border)!important;border-radius:8px!important;padding:16px!important;}
+[data-testid="metric-container"] [data-testid="stMetricValue"]{color:#FEF102!important;font-size:2rem!important;font-weight:700!important;}
 [data-testid="metric-container"] [data-testid="stMetricLabel"]{color:#ffffff!important;font-size:0.85rem!important;}
 /* All buttons uniform */
 .stButton>button{
@@ -56,33 +56,33 @@ hr{border-color:var(--border)!important;}
 .player-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:4px;transition:border-color 0.2s;}
 .player-card:hover{border-color:var(--green);}
 .player-card .name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#ffffff;}
-.player-card .sub{font-family:'DM Mono',monospace;font-size:11px;color:#a0b8a0;letter-spacing:0.06em;margin-top:2px;}
+.player-card .sub{font-family:'DM Mono',monospace;font-size:11px;color:#b8d4c8;letter-spacing:0.06em;margin-top:2px;}
 .player-card .odds{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--green);}
 .badge{display:inline-block;padding:2px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:500;}
-.badge-safe{background:rgba(74,222,128,0.12);color:#4ade80;border:1px solid rgba(74,222,128,0.3);}
+.badge-safe{background:rgba(254,241,2,0.15);color:#FEF102;border:1px solid rgba(254,241,2,0.4);}
 .badge-balanced{background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.3);}
 .badge-high{background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.3);}
 .team-panel{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;}
-.team-panel.valid{border-color:#4ade80;box-shadow:0 0 20px rgba(74,222,128,0.1);}
-.team-panel.invalid{border-color:#f87171;box-shadow:0 0 20px rgba(248,113,113,0.05);}
-.section-header{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#a0b8a0;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(74,222,128,0.06);font-size:13px;}
-.stat-row .label{color:#a0b8a0;font-family:'DM Mono',monospace;font-size:11px;}
+.team-panel.valid{border-color:#FEF102;box-shadow:0 0 20px rgba(254,241,2,0.15);}
+.team-panel.invalid{border-color:#f87171;box-shadow:0 0 20px rgba(248,113,113,0.08);}
+.section-header{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#b8d4c8;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(254,241,2,0.08);font-size:13px;}
+.stat-row .label{color:#b8d4c8;font-family:'DM Mono',monospace;font-size:11px;}
 .stat-row .value{color:#ffffff;font-weight:500;}
-.page-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;line-height:1.1;letter-spacing:-0.01em;background:linear-gradient(135deg,#ffffff 0%,#4ade80 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.page-subtitle{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#a0b8a0;margin-top:4px;}
-.bio-card{background:#1e2a1e;border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;}
+.page-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;line-height:1.1;letter-spacing:-0.01em;background:linear-gradient(135deg,#ffffff 0%,#FEF102 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-subtitle{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#b8d4c8;margin-top:4px;}
+.bio-card{background:#1a5e42;border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-.info-item{background:#1e2a1e;border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
-.info-item .ilabel{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#a0b8a0;margin-bottom:4px;}
+.info-item{background:#1a5e42;border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
+.info-item .ilabel{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#b8d4c8;margin-bottom:4px;}
 .info-item .ivalue{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#ffffff;}
 .info-item .ivalue.highlight{color:var(--green);font-family:'Playfair Display',serif;font-size:20px;font-weight:900;}
-.suggest-card{background:var(--surface2);border:1px solid rgba(74,222,128,0.12);border-radius:8px;padding:10px 14px;margin-bottom:8px;}
+.suggest-card{background:var(--surface2);border:1px solid rgba(254,241,2,0.15);border-radius:8px;padding:10px 14px;margin-bottom:8px;}
 .suggest-card .sname{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#ffffff;}
-.suggest-card .smeta{font-family:'DM Mono',monospace;font-size:10px;color:#a0b8a0;}
-.progress-wrap{background:#1e2a1e;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;}
-.progress-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#a0b8a0;margin-bottom:6px;display:flex;justify-content:space-between;}
-.progress-track{background:#0a0f0a;border-radius:4px;height:12px;overflow:hidden;border:1px solid rgba(74,222,128,0.15);}
+.suggest-card .smeta{font-family:'DM Mono',monospace;font-size:10px;color:#b8d4c8;}
+.progress-wrap{background:#1a5e42;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;}
+.progress-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#b8d4c8;margin-bottom:6px;display:flex;justify-content:space-between;}
+.progress-track{background:#0e4f38;border-radius:4px;height:12px;overflow:hidden;border:1px solid rgba(254,241,2,0.2);}
 .progress-bar{height:100%;border-radius:4px;transition:width 0.4s ease;}
 @media(max-width:768px){.mobile-team-top{display:block!important;}.desktop-team-only{display:none!important;}}
 @media(min-width:769px){.mobile-team-top{display:none!important;}.desktop-team-only{display:block!important;}}
@@ -233,11 +233,11 @@ def suggest_completions(df, selected_ids, top_n=5):
 
 
 def _chart_layout(height=380, xaxis=None, yaxis=None, extra=None):
-    layout = dict(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(17,24,17,0.4)",
+    layout = dict(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(14,79,56,0.5)",
         font=dict(family="DM Sans", color="#ffffff", size=11),
         margin=dict(l=40, r=20, t=40, b=40), height=height)
-    _x = dict(gridcolor="rgba(74,222,128,0.08)", linecolor="rgba(74,222,128,0.2)")
-    _y = dict(gridcolor="rgba(74,222,128,0.08)", linecolor="rgba(74,222,128,0.2)")
+    _x = dict(gridcolor="rgba(254,241,2,0.08)", linecolor="rgba(254,241,2,0.2)")
+    _y = dict(gridcolor="rgba(254,241,2,0.08)", linecolor="rgba(254,241,2,0.2)")
     if xaxis: _x.update(xaxis)
     if yaxis: _y.update(yaxis)
     layout["xaxis"] = _x
@@ -393,7 +393,7 @@ def render_team_panel(df, context="main"):
     is_valid = (n == 3) and (c_odds >= 150)
 
     pct = min(c_odds / 150 * 100, 100)
-    bar_color = "#4ade80" if c_odds >= 150 else "#f87171"
+    bar_color = "#FEF102" if c_odds >= 150 else "#f87171"
     st.markdown(f"""<div class="progress-wrap">
         <div class="progress-label">
             <span>COMBINED ODDS TOWARD 150</span>
@@ -436,10 +436,10 @@ def render_team_panel(df, context="main"):
         if n == 3 and not is_valid:
             st.markdown('<div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.3);border-radius:6px;padding:10px;font-family:\'DM Mono\';font-size:11px;color:#f87171;">⚠ Combined odds must be ≥ 150 for a valid entry.</div>', unsafe_allow_html=True)
         elif is_valid:
-            st.markdown('<div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:10px;font-family:\'DM Mono\';font-size:11px;color:#4ade80;">✓ Valid team — ready to submit.</div>', unsafe_allow_html=True)
+            st.markdown('<div style="background:rgba(254,241,2,0.08);border:1px solid rgba(254,241,2,0.35);border-radius:6px;padding:10px;font-family:\'DM Mono\';font-size:11px;color:#4ade80;">✓ Valid team — ready to submit.</div>', unsafe_allow_html=True)
             st.markdown("""<div style="margin-top:10px;text-align:center;">
                 <a href="https://eoghanobrien-bit.github.io/masters-sweepstake/" target="_blank"
-                   style="display:inline-block;padding:10px 20px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.5);border-radius:6px;font-family:'DM Mono';font-size:12px;color:#4ade80;text-decoration:none;letter-spacing:0.06em;">
+                   style="display:inline-block;padding:10px 20px;background:rgba(254,241,2,0.12);border:1px solid rgba(254,241,2,0.5);border-radius:6px;font-family:'DM Mono';font-size:12px;color:#4ade80;text-decoration:none;letter-spacing:0.06em;">
                     ⛳ Submit your team →</a></div>""", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -631,20 +631,26 @@ def _render_profile_combined(row, df):
 
         # Define all stats to show: (display_label, column_name, formatter, highlight)
         stats_spec = [
-            ("MASTERS WINS",       "masters_wins",                lambda v: str(int(float(v))),                               True),
-            ("APPEARANCES",        "masters_appearances",         lambda v: str(int(float(v))),                               False),
-            ("BEST FINISH",        "best_finish_position",        best_finish_display,                                        True),
-            ("CUTS MADE %",        "cuts_made_percentage",        lambda v: f"{float(v):.0f}%",                               False),
-            ("TOTAL ROUNDS",       "total_rounds_played",         lambda v: str(int(float(v))),                               False),
-            ("AVG ROUND SCORE",    "avg_round",                   lambda v: f"{float(v):.2f}" if float(v) > 0 else "Rookie",  False),
-            ("LOWEST ROUND",       "lowest_round",                lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
-            ("HIGHEST ROUND",      "highest_round",               lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
-            ("ROUNDS UNDER PAR %", "rounds_under_par_percentage", lambda v: f"{float(v):.0f}%",                               False),
-            ("AVG FINISH POS",     "avg_finish_position",         lambda v: f"{float(v):.1f}",                                False),
-            ("MASTERS EARNINGS",   "masters_earnings",            fmt_currency,                                               False),
-            ("TOTAL PRIZE MONEY",  "total_prize_money",           fmt_currency,                                               False),
-            ("CAREER EARNINGS",    "career_earnings",             fmt_currency,                                               False),
-            ("MONEY EARNED",       "money_earned",                fmt_currency,                                               False),
+            ("MASTERS WINS",        "masters_wins",                lambda v: str(int(float(v))),                               True),
+            ("APPEARANCES",         "masters_appearances",         lambda v: str(int(float(v))),                               False),
+            ("BEST FINISH",         "best_finish_position",        best_finish_display,                                        True),
+            ("CUTS MADE %",         "cuts_made_percentage",        lambda v: f"{float(v):.0f}%",                               False),
+            ("CUTS MADE",           "cuts_made",                   lambda v: str(int(float(v))),                               False),
+            ("TOURNAMENTS PLAYED",  "tournaments_played",          lambda v: str(int(float(v))),                               False),
+            ("ROUNDS PLAYED",       "rounds_played",               lambda v: str(int(float(v))),                               False),
+            ("TOTAL ROUNDS",        "total_rounds_played",         lambda v: str(int(float(v))),                               False),
+            ("AVG ROUND SCORE",     "avg_round",                   lambda v: f"{float(v):.2f}" if float(v) > 0 else "Rookie",  False),
+            ("LOW ROUND",           "low_round",                   lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
+            ("LOWEST ROUND",        "lowest_round",                lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
+            ("HIGH ROUND",          "high_round",                  lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
+            ("HIGHEST ROUND",       "highest_round",               lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
+            ("ROUNDS UNDER PAR",    "rounds_under_par",            lambda v: str(int(float(v))),                               False),
+            ("ROUNDS UNDER PAR %",  "rounds_under_par_percentage", lambda v: f"{float(v):.0f}%",                               False),
+            ("AVG FINISH POS",      "avg_finish_position",         lambda v: f"{float(v):.1f}",                                False),
+            ("MONEY EARNED",        "money_earned",                fmt_currency,                                               False),
+            ("MASTERS EARNINGS",    "masters_earnings",            fmt_currency,                                               False),
+            ("TOTAL PRIZE MONEY",   "total_prize_money",           fmt_currency,                                               False),
+            ("CAREER EARNINGS",     "career_earnings",             fmt_currency,                                               False),
         ]
 
         html = '<div class="info-grid">'
@@ -673,63 +679,78 @@ def _render_profile_combined(row, df):
         st.markdown('<div class="section-header">Odds vs Field</div>', unsafe_allow_html=True)
         fig = go.Figure()
         fig.add_trace(go.Histogram(x=df["odds"], nbinsx=25,
-            marker_color="rgba(74,222,128,0.25)",
-            marker_line_color="rgba(74,222,128,0.5)", marker_line_width=1))
-        fig.add_vline(x=row["odds"], line_color="#4ade80", line_width=2, line_dash="dash",
+            marker_color="rgba(254,241,2,0.18)",
+            marker_line_color="rgba(254,241,2,0.5)", marker_line_width=1))
+        fig.add_vline(x=row["odds"], line_color="#FEF102", line_width=2, line_dash="dash",
             annotation_text=f"{row['first_name']} {row['last_name']} ({int(row['odds'])}/1)",
-            annotation_font_color="#4ade80", annotation_font_size=10)
+            annotation_font_color="#FEF102", annotation_font_size=10)
         fig.update_layout(**_chart_layout(220, xaxis={"title":"Odds"}, yaxis={"title":"# Players"}))
         st.plotly_chart(fig, use_container_width=True)
 
 
 def _render_profile_radar(row, df):
-    # Build list of valid norm cols — use the _norm column value directly (already 0-1)
+    # Collect _norm columns that have valid (non-constant) data across the field
     norm_cols = []
     for c in df.columns:
         if not c.endswith("_norm"):
             continue
-        # Use the _norm column itself as the value — it's already normalised 0→1
         s = pd.to_numeric(df[c], errors="coerce")
-        if s.notna().any():
-            norm_cols.append(c)
+        # Skip if all NaN or all the same value (no discrimination)
+        if s.notna().sum() < 2:
+            continue
+        # Clamp to [0,1] — if a _norm col was accidentally stored as 0–100, rescale it
+        s_clean = s.dropna()
+        if s_clean.max() > 1.0:
+            df[c] = s / s.max()  # rescale in-place for this session
+        norm_cols.append(c)
 
     if not norm_cols:
         st.info("No normalised (_norm) columns found in player data.")
         return
 
-    # Map norm col → raw col for tooltip display (e.g. cuts_made_percentage_norm → cuts_made_percentage)
+    # Map norm col → raw col for tooltip display only
     raw_col_map = {}
     for nc in norm_cols:
         raw = nc[:-5]  # strip _norm
-        raw_col_map[nc] = raw if raw in df.columns else nc
+        raw_col_map[nc] = raw if raw in df.columns else None
 
     player_options = ["Field Average"] + df.apply(lambda r: f"{r['first_name']} {r['last_name']}", axis=1).tolist()
     compare_label = st.selectbox("Compare against", player_options, index=0, key="radar_compare")
 
     labels = [c.replace("_norm","").replace("_"," ").title() for c in norm_cols]
 
-    def safe_float(v):
-        try: return float(v)
-        except: return 0.0
+    def safe_norm(r, nc):
+        """Always read from the _norm column; clamp to [0,1]."""
+        try:
+            v = float(r[nc])
+            if np.isnan(v): return 0.0
+            return max(0.0, min(1.0, v))
+        except Exception:
+            return 0.0
 
-    def fmt_raw(rc, v):
+    def fmt_tooltip(rc, v):
+        """Format raw value for hover tooltip."""
         try:
             fv = float(v)
-            if "percentage" in rc or rc.endswith("_pct"):
+            if rc and ("percentage" in rc or rc.endswith("_pct")):
                 return f"{fv:.1f}%"
+            if rc and ("earning" in rc or "prize" in rc or "money" in rc):
+                return f"${fv:,.0f}"
             return f"{fv:.2f}"
-        except:
-            return str(v)
+        except Exception:
+            return str(v) if v is not None else "—"
 
     def player_vals(r):
         vals, raws = [], []
         for nc in norm_cols:
-            # Shape value: always from the _norm column (guaranteed 0-1)
-            vals.append(safe_float(r.get(nc, 0)))
-            # Tooltip value: from raw column if available, else _norm col
+            # Shape: strictly from _norm column
+            vals.append(safe_norm(r, nc))
+            # Tooltip: from raw column if it exists
             rc = raw_col_map[nc]
-            raw_val = r.get(rc, r.get(nc, 0))
-            raws.append(fmt_raw(rc, raw_val))
+            if rc and rc in r.index:
+                raws.append(fmt_tooltip(rc, r[rc]))
+            else:
+                raws.append(fmt_tooltip(None, r[nc]))
         return vals, raws
 
     p_vals, p_raws = player_vals(row)
@@ -737,19 +758,22 @@ def _render_profile_radar(row, df):
     if compare_label == "Field Average":
         c_vals, c_raws = [], []
         for nc in norm_cols:
-            c_vals.append(safe_float(pd.to_numeric(df[nc], errors="coerce").mean()))
+            avg_norm = pd.to_numeric(df[nc], errors="coerce").mean()
+            c_vals.append(max(0.0, min(1.0, avg_norm)) if pd.notna(avg_norm) else 0.0)
             rc = raw_col_map[nc]
-            src = df[rc] if rc in df.columns else df[nc]
-            avg = pd.to_numeric(src, errors="coerce").mean()
-            c_raws.append(fmt_raw(rc, avg) if pd.notna(avg) else "—")
-        c_name, c_color, c_fill = "Field Average", "#fbbf24", "rgba(251,191,36,0.06)"
+            if rc and rc in df.columns:
+                avg_raw = pd.to_numeric(df[rc], errors="coerce").mean()
+                c_raws.append(fmt_tooltip(rc, avg_raw) if pd.notna(avg_raw) else "—")
+            else:
+                c_raws.append(fmt_tooltip(None, avg_norm))
+        c_name, c_color, c_fill = "Field Average", "#fbbf24", "rgba(251,191,36,0.08)"
     else:
         match = df[df.apply(lambda r: f"{r['first_name']} {r['last_name']}" == compare_label, axis=1)]
         if match.empty:
             st.warning("Player not found.")
             return
         c_vals, c_raws = player_vals(match.iloc[0])
-        c_name, c_color, c_fill = compare_label, "#f87171", "rgba(248,113,113,0.06)"
+        c_name, c_color, c_fill = compare_label, "#f87171", "rgba(248,113,113,0.08)"
 
     def close(lst): return lst + [lst[0]]
 
@@ -759,17 +783,17 @@ def _render_profile_radar(row, df):
         customdata=close(c_raws),
         hovertemplate="<b>%{theta}</b><br>%{customdata}<extra>" + c_name + "</extra>"))
     fig.add_trace(go.Scatterpolar(r=close(p_vals), theta=close(labels), fill="toself",
-        fillcolor="rgba(74,222,128,0.12)", line=dict(color="#4ade80", width=2),
-        marker=dict(color="#4ade80", size=5),
+        fillcolor="rgba(254,241,2,0.12)", line=dict(color="#FEF102", width=2),
+        marker=dict(color="#FEF102", size=5),
         name=f"{row['first_name']} {row['last_name']}",
         customdata=close(p_raws),
         hovertemplate="<b>%{theta}</b><br>%{customdata}<extra>" + f"{row['first_name']} {row['last_name']}" + "</extra>"))
     fig.update_layout(
-        polar=dict(bgcolor="rgba(17,24,17,0)",
+        polar=dict(bgcolor="rgba(14,79,56,0)",
             radialaxis=dict(visible=True, range=[0,1],
-                gridcolor="rgba(74,222,128,0.15)", linecolor="rgba(74,222,128,0.15)",
-                tickfont=dict(color="#a0b8a0", size=9, family="DM Mono")),
-            angularaxis=dict(gridcolor="rgba(74,222,128,0.12)", linecolor="rgba(74,222,128,0.12)",
+                gridcolor="rgba(254,241,2,0.18)", linecolor="rgba(254,241,2,0.18)",
+                tickfont=dict(color="#b8d4c8", size=9, family="DM Mono")),
+            angularaxis=dict(gridcolor="rgba(254,241,2,0.12)", linecolor="rgba(254,241,2,0.12)",
                 tickfont=dict(color="#ffffff", size=10, family="DM Sans"))),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=60,r=60,t=40,b=40), height=480, showlegend=True,
@@ -787,7 +811,7 @@ def render_score_risk_overview(df):
 <div class="section-header">VALUE SCORE FORMULA</div>
 The Value Score is a weighted composite of five Masters performance metrics, each normalised 0→1 across the field:
 <br><br>
-<div style="font-family:'DM Mono';font-size:12px;color:#4ade80;padding:10px;background:rgba(74,222,128,0.05);border-radius:6px;border:1px solid rgba(74,222,128,0.15);">
+<div style="font-family:'DM Mono';font-size:12px;color:#4ade80;padding:10px;background:rgba(74,222,128,0.05);border-radius:6px;border:1px solid rgba(254,241,2,0.18);">
 Score = 0.30 × Avg Round Score<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + 0.20 × Cuts Made %<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + 0.20 × Masters Wins<br>
@@ -801,7 +825,7 @@ Higher score = stronger Augusta pedigree relative to the field. Rookies score 0 
 <div class="section-header">RISK TIER CLASSIFICATION</div>
 Risk is based on the player's pre-tournament betting odds:
 <br><br>
-<div style="font-family:'DM Mono';font-size:12px;padding:10px;background:rgba(74,222,128,0.05);border-radius:6px;border:1px solid rgba(74,222,128,0.15);">
+<div style="font-family:'DM Mono';font-size:12px;padding:10px;background:rgba(74,222,128,0.05);border-radius:6px;border:1px solid rgba(254,241,2,0.18);">
 <span style="color:#4ade80;">■ Safe</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Odds &lt; 25/1<br>
 <span style="color:#fbbf24;">■ Balanced</span>&nbsp;&nbsp; Odds 25/1 – 60/1<br>
 <span style="color:#f87171;">■ High Risk</span>&nbsp; Odds &gt; 60/1
@@ -821,14 +845,14 @@ Sum of each player's odds (e.g. 12 + 50 + 100 = 162). Must be ≥ 150 for a vali
     with m4: st.metric("High Risk (>60/1)", len(df[df["risk"]=="High Risk"]))
 
     st.markdown("---")
-    RISK_COLORS = {"Safe":"#4ade80","Balanced":"#fbbf24","High Risk":"#f87171"}
+    RISK_COLORS = {"Safe":"#FEF102","Balanced":"#fbbf24","High Risk":"#f87171"}
     r1l, r1r = st.columns(2, gap="large")
     with r1l:
         st.markdown("**Value Score vs Odds**")
         fig = go.Figure()
         for rt, grp in df.groupby("risk"):
             fig.add_trace(go.Scatter(x=grp["odds"], y=grp["value_score"], mode="markers", name=rt,
-                marker=dict(color=RISK_COLORS.get(rt,"#4ade80"), size=8, opacity=0.8, line=dict(color="#0a0f0a",width=1)),
+                marker=dict(color=RISK_COLORS.get(rt,"#FEF102"), size=8, opacity=0.8, line=dict(color="#0a0f0a",width=1)),
                 text=grp["first_name"]+" "+grp["last_name"],
                 hovertemplate="<b>%{text}</b><br>Odds: %{x}/1<br>Value: %{y:.3f}<extra></extra>"))
         fig.update_layout(**_chart_layout(380, xaxis={"title":"Odds"}, yaxis={"title":"Value Score"},
@@ -839,7 +863,7 @@ Sum of each player's odds (e.g. 12 + 50 + 100 = 162). Must be ≥ 150 for a vali
         rc = df["risk"].value_counts().reindex(["Safe","Balanced","High Risk"],fill_value=0).reset_index()
         rc.columns = ["Risk","Count"]
         fig = go.Figure(go.Bar(x=rc["Risk"], y=rc["Count"],
-            marker_color=["#4ade80","#fbbf24","#f87171"],
+            marker_color=["#FEF102","#fbbf24","#f87171"],
             text=rc["Count"], textposition="outside", textfont=dict(color="#ffffff",size=12)))
         fig.update_layout(**_chart_layout(380))
         st.plotly_chart(fig, use_container_width=True)
@@ -853,7 +877,7 @@ Sum of each player's odds (e.g. 12 + 50 + 100 = 162). Must be ≥ 150 for a vali
             nr = grp[grp["avg_round"] > 0]
             if not nr.empty:
                 fig.add_trace(go.Scatter(x=nr["cuts_made_percentage"], y=nr["avg_round"], mode="markers", name=rt,
-                    marker=dict(color=RISK_COLORS.get(rt,"#4ade80"), size=8, opacity=0.8, line=dict(color="#0a0f0a",width=1)),
+                    marker=dict(color=RISK_COLORS.get(rt,"#FEF102"), size=8, opacity=0.8, line=dict(color="#0a0f0a",width=1)),
                     text=nr["first_name"]+" "+nr["last_name"],
                     hovertemplate="<b>%{text}</b><br>Cuts Made: %{x:.0f}%<br>Avg Round: %{y:.2f}<extra></extra>"))
         fig.update_layout(**_chart_layout(360, xaxis={"title":"Cuts Made %"}, yaxis={"title":"Avg Round Score"},
@@ -929,7 +953,7 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
             agg = agg.head(15)
             x_vals = agg["_cnt"].tolist()
         fig = go.Figure(go.Bar(x=x_vals, y=agg["_name"].tolist(), orientation="h",
-            marker=dict(color=x_vals, colorscale=[[0,"#166534"],[1,"#4ade80"]], showscale=False),
+            marker=dict(color=x_vals, colorscale=[[0,"#0e4f38"],[1,"#FEF102"]], showscale=False),
             hovertemplate="<b>%{y}</b><br>Picks: %{x}<extra></extra>"))
         fig.update_layout(**_chart_layout(420, yaxis={"autorange":"reversed"}))
         st.plotly_chart(fig, use_container_width=True)
@@ -1001,7 +1025,7 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
                     textposition="top center",
                     textfont=dict(size=9, color="#a0b8a0"),
                     marker=dict(color=pdf2["Picks"],
-                                colorscale=[[0,"#166534"],[0.5,"#4ade80"],[1,"#fbbf24"]],
+                                colorscale=[[0,"#0e4f38"],[0.5,"#FEF102"],[1,"#fbbf24"]],
                                 size=12, showscale=True,
                                 colorbar=dict(title="Picks", tickfont=dict(color="#ffffff"),
                                               titlefont=dict(color="#ffffff")),
@@ -1016,7 +1040,7 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
                 # Fallback: bar chart of picks
                 pdf2s = pdf2.sort_values("Picks",ascending=False).head(15)
                 fig = go.Figure(go.Bar(x=pdf2s["Picks"].tolist(), y=pdf2s["Player"].tolist(),
-                    orientation="h", marker_color="#4ade80",
+                    orientation="h", marker_color="#FEF102",
                     hovertemplate="<b>%{y}</b><br>Picks: %{x}<extra></extra>"))
                 fig.update_layout(**_chart_layout(380, yaxis={"autorange":"reversed"}))
                 st.plotly_chart(fig, use_container_width=True)
@@ -1095,7 +1119,7 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
             yr_labels = agg["year"].astype(int).astype(str).tolist()
             fig = go.Figure()
             fig.add_trace(go.Bar(name="Made Cut", x=yr_labels, y=agg["made_cut"],
-                marker_color="#4ade80",
+                marker_color="#FEF102",
                 text=agg["made_cut"].astype(int), textposition="inside",
                 textfont=dict(color="#0a0f0a",size=11,family="DM Mono")))
             fig.add_trace(go.Bar(name="Missed Cut", x=yr_labels, y=agg["missed_cut"],
