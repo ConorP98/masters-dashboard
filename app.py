@@ -763,7 +763,7 @@ def _render_profile_radar(row, df):
                 c_raws.append(fmt_tooltip(rc, avg_raw) if pd.notna(avg_raw) else "—")
             else:
                 c_raws.append(fmt_tooltip(None, avg_norm))
-        c_name, c_color, c_fill = "Field Average", "#fbbf24", "rgba(251,191,36,0.08)"
+        c_name, c_color, c_fill = "Field Average", "#f87171", "rgba(248,113,113,0.08)"
     else:
         match = df[df.apply(lambda r: f"{r['first_name']} {r['last_name']}" == compare_label, axis=1)]
         if match.empty:
