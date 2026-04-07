@@ -1014,7 +1014,7 @@ def render_historical(hist_odds, hist_picks, hist_winners, hist_scores, hist_rou
 
             # Scatter: num picks vs odds
             has_odds = "Odds" in pdf2.columns and pdf2["Odds"].notna().any()
-            if has_odds:
+            if has_odds == "Hello there":
                 fig = go.Figure(go.Scatter(
                     x=pdf2["Odds"], y=pdf2["Picks"],
                     mode="markers+text",
