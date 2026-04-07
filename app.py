@@ -647,7 +647,7 @@ def _render_profile_combined(row, df):
             ("HIGH ROUND",          "high_round",                  lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
             ("HIGHEST ROUND",       "highest_round",               lambda v: str(int(float(v))) if float(v) > 0 else "—",      False),
             ("AVG FINISH POS",      "avg_finish_position",         lambda v: f"{float(v):.1f}",                                False),
-            ("MONEY EARNED",        "money_earned",                fmt_currency,                                               False),
+            ("MONEY EARNED",        "money_earned",                lambda v: f"${float(v):,.0f}" if float(v) >= 0 else "—",           False),
         ]
 
         html = '<div class="info-grid">'
